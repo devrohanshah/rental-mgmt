@@ -2,6 +2,7 @@
 class RentalManager {
     constructor() {
         this.data = this.loadData();
+        this.tenants = this.loadTenants(); // Add tenant management
         this.currentEditId = null;
         this.currentDeleteId = null;
         this.deferredPrompt = null;
@@ -22,11 +23,12 @@ class RentalManager {
                 'nav-dashboard': 'Dashboard',
                 'nav-add-entry': 'Add Entry',
                 'nav-history': 'History',
+                'nav-tenants': 'Tenants',
                 'nav-settings': 'Settings',
                 
                 // Dashboard
                 'dashboard-title': 'Dashboard',
-                'dashboard-subtitle': 'Current month\'s overview',
+                'dashboard-subtitle': 'Current month\'s overview for all tenants',
                 'total-amount': 'Total Amount',
                 'paid-amount': 'Paid',
                 'unpaid-amount': 'Unpaid',
@@ -36,10 +38,37 @@ class RentalManager {
                 'mark-all-paid': 'Mark All as Paid',
                 'export-data': 'Export Data',
                 'no-bills': 'No bills recorded for this month',
+                'tenants-paid': 'Tenants with All Bills Paid',
+                'tenants-unpaid': 'Tenants with Unpaid Bills',
+                'no-tenants-paid': 'No tenants have fully paid this month',
+                'no-tenants-unpaid': 'All tenants have paid their bills',
+                
+                // Tenants
+                'tenants-title': 'Tenant Management',
+                'tenants-subtitle': 'Manage your rental tenants',
+                'add-tenant': 'Add New Tenant',
+                'tenant-name': 'Tenant Name',
+                'tenant-email': 'Email (Optional)',
+                'tenant-phone': 'Phone (Optional)',
+                'tenant-room': 'Room/Unit Number',
+                'tenant-deposit': 'Security Deposit (Rs.)',
+                'tenant-rent': 'Monthly Rent (Rs.)',
+                'tenant-move-in': 'Move-in Date',
+                'tenant-status': 'Status',
+                'status-active': 'Active',
+                'status-inactive': 'Inactive',
+                'save-tenant': 'Save Tenant',
+                'edit-tenant': 'Edit Tenant',
+                'delete-tenant': 'Delete Tenant',
+                'tenant-details': 'Tenant Details',
+                'no-tenants': 'No tenants added yet',
+                'add-first-tenant': 'Add First Tenant',
                 
                 // Add Entry
                 'add-entry-title': 'Add New Entry',
                 'add-entry-subtitle': 'Record rent, WiFi, and electricity bills',
+                'select-tenant': 'Select Tenant',
+                'choose-tenant': 'Choose a tenant...',
                 'date-selection': 'Date Selection',
                 'bs-year': 'Bikram Sambat Year',
                 'month': 'Month',
@@ -59,11 +88,13 @@ class RentalManager {
                 
                 // History
                 'history-title': 'Payment History',
-                'history-subtitle': 'View and manage all your records',
-                'search-placeholder': 'Search by month, year, or notes...',
+                'history-subtitle': 'View and manage all tenant records',
+                'search-placeholder': 'Search by tenant, month, year, or notes...',
                 'filter-all': 'All',
                 'filter-paid': 'Paid',
                 'filter-unpaid': 'Unpaid',
+                'filter-tenant': 'By Tenant',
+                'all-tenants': 'All Tenants',
                 'no-history': 'No payment history available',
                 'add-first-entry': 'Add First Entry',
                 'paid-status': 'Paid',
@@ -151,11 +182,12 @@ class RentalManager {
                 'nav-dashboard': 'ड्यासबोर्ड',
                 'nav-add-entry': 'नयाँ प्रविष्टि',
                 'nav-history': 'इतिहास',
+                'nav-tenants': 'भाडामा बस्नेहरू',
                 'nav-settings': 'सेटिङ्हरू',
                 
                 // Dashboard
                 'dashboard-title': 'ड्यासबोर्ड',
-                'dashboard-subtitle': 'यस महिनाको विवरण',
+                'dashboard-subtitle': 'सबै भाडामा बस्नेहरूको यस महिनाको विवरण',
                 'total-amount': 'कुल रकम',
                 'paid-amount': 'भुक्तानी',
                 'unpaid-amount': 'बाँकी',
@@ -165,10 +197,37 @@ class RentalManager {
                 'mark-all-paid': 'सबै भुक्तानी भएको चिन्ह लगाउनुहोस्',
                 'export-data': 'डेटा निर्यात गर्नुहोस्',
                 'no-bills': 'यस महिनाको लागि कुनै बिल रेकर्ड गरिएको छैन',
+                'tenants-paid': 'सबै बिल भुक्तानी गरेका भाडामा बस्नेहरू',
+                'tenants-unpaid': 'बाँकी बिल भएका भाडामा बस्नेहरू',
+                'no-tenants-paid': 'यस महिना कुनै पनि भाडामा बस्नेले पूर्ण भुक्तानी गरेको छैन',
+                'no-tenants-unpaid': 'सबै भाडामा बस्नेहरूले आफ्ना बिलहरू भुक्तानी गरेका छन्',
+                
+                // Tenants
+                'tenants-title': 'भाडामा बस्ने व्यवस्थापन',
+                'tenants-subtitle': 'आफ्ना भाडामा बस्नेहरूको व्यवस्थापन गर्नुहोस्',
+                'add-tenant': 'नयाँ भाडामा बस्ने थप्नुहोस्',
+                'tenant-name': 'भाडामा बस्नेको नाम',
+                'tenant-email': 'इमेल (वैकल्पिक)',
+                'tenant-phone': 'फोन (वैकल्पिक)',
+                'tenant-room': 'कोठा/युनिट नम्बर',
+                'tenant-deposit': 'धरौटी रकम (रु.)',
+                'tenant-rent': 'मासिक भाडा (रु.)',
+                'tenant-move-in': 'भित्रिएको मिति',
+                'tenant-status': 'स्थिति',
+                'status-active': 'सक्रिय',
+                'status-inactive': 'निष्क्रिय',
+                'save-tenant': 'भाडामा बस्ने सेभ गर्नुहोस्',
+                'edit-tenant': 'भाडामा बस्ने सम्पादन गर्नुहोस्',
+                'delete-tenant': 'भाडामा बस्ने मेटाउनुहोस्',
+                'tenant-details': 'भाडामा बस्नेको विवरण',
+                'no-tenants': 'अझै कुनै भाडामा बस्ने थपिएको छैन',
+                'add-first-tenant': 'पहिलो भाडामा बस्ने थप्नुहोस्',
                 
                 // Add Entry
                 'add-entry-title': 'नयाँ प्रविष्टि थप्नुहोस्',
                 'add-entry-subtitle': 'भाडा, वाइफाइ, र बिजुलीको बिल रेकर्ड गर्नुहोस्',
+                'select-tenant': 'भाडामा बस्ने छान्नुहोस्',
+                'choose-tenant': 'भाडामा बस्ने छान्नुहोस्...',
                 'date-selection': 'मिति छनोट',
                 'bs-year': 'विक्रम संवत् वर्ष',
                 'month': 'महिना',
@@ -193,6 +252,8 @@ class RentalManager {
                 'filter-all': 'सबै',
                 'filter-paid': 'भुक्तानी',
                 'filter-unpaid': 'बाँकी',
+                'filter-tenant': 'भाडामा बस्ने द्वारा',
+                'all-tenants': 'सबै भाडामा बस्नेहरू',
                 'no-history': 'कुनै भुक्तानी इतिहास उपलब्ध छैन',
                 'add-first-entry': 'पहिलो प्रविष्टि थप्नुहोस्',
                 'paid-status': 'भुक्तानी',
@@ -280,7 +341,7 @@ class RentalManager {
                 'nav-dashboard': 'डैशबोर्ड',
                 'nav-add-entry': 'नव प्रविष्टि',
                 'nav-history': 'इतिहास',
-                'nav-settings': 'सेटिंग सभ',
+                'nav-tenants': 'सेटिंग सभ',
                 
                 // Dashboard
                 'dashboard-title': 'डैशबोर्ड',
@@ -294,10 +355,37 @@ class RentalManager {
                 'mark-all-paid': 'सब भुगतान भेल चिन्ह लगाऊ',
                 'export-data': 'डेटा निर्यात करू',
                 'no-bills': 'ई मासक लेल कोनो बिल रिकॉर्ड नहि अछि',
+                'tenants-paid': 'सब बिल भुगतान कएल भाडा पर',
+                'tenants-unpaid': 'बाकी बिल वाला भाडा पर',
+                'no-tenants-paid': 'ई महिना कोनो भाडा पर पूर्ण भुगतान कएल नहि अछि',
+                'no-tenants-unpaid': 'सभ भाडा पर अपन बिल भुगतान कए चुकल अछि',
+                
+                // Tenants
+                'tenants-title': 'भाडा प्रबंधन',
+                'tenants-subtitle': 'अपन भाडा पर',
+                'add-tenant': 'नव भाडा जोड़ू',
+                'tenant-name': 'भाडा के नाम',
+                'tenant-email': 'ईमेल (वैकल्पिक)',
+                'tenant-phone': 'फोन (वैकल्पिक)',
+                'tenant-room': 'कमरा/यूनिट नंबर',
+                'tenant-deposit': 'सुरक्षा जमा (रु.)',
+                'tenant-rent': 'मासिक भाडा (रु.)',
+                'tenant-move-in': 'आवास मिति',
+                'tenant-status': 'स्थिति',
+                'status-active': 'सक्रिय',
+                'status-inactive': 'निष्क्रिय',
+                'save-tenant': 'भाडा के सुरक्षित करू',
+                'edit-tenant': 'भाडा के संपादित करू',
+                'delete-tenant': 'भाडा के हटाऊ',
+                'tenant-details': 'भाडा के विवरण',
+                'no-tenants': 'अखन धरि कोनो भाडा नहि जोड़ल गेल अछि',
+                'add-first-tenant': 'पहिल भाडा जोड़ू',
                 
                 // Add Entry
                 'add-entry-title': 'नव प्रविष्टि जोड़ू',
                 'add-entry-subtitle': 'भाडा, वाईफाई आ बिजली क बिल रिकॉर्ड करू',
+                'select-tenant': 'भाडा चुनू',
+                'choose-tenant': 'एकटा भाडा चुनू...',
                 'date-selection': 'तारीख चुनाव',
                 'bs-year': 'विक्रम संवत वर्ष',
                 'month': 'मास',
@@ -322,6 +410,8 @@ class RentalManager {
                 'filter-all': 'सब',
                 'filter-paid': 'भुगतान',
                 'filter-unpaid': 'बाकी',
+                'filter-tenant': 'भाडा द्वारा',
+                'all-tenants': 'सभ भाडा पर',
                 'no-history': 'कोनो भुगतान इतिहास उपलब्ध नहि अछि',
                 'add-first-entry': 'पहिल प्रविष्टि जोड़ू',
                 'paid-status': 'भुगतान',
@@ -332,7 +422,7 @@ class RentalManager {
                 // Settings
                 'settings-title': 'सेटिंग सभ',
                 'settings-subtitle': 'अपन एप प्राथमिकता सभ प्रबंधन करू',
-                'electricity-rate': 'बिजलीक दर',
+                'electricity-rate': 'बिजुलीक दर',
                 'rate-per-unit': 'प्रति इकाई दर (रु.)',
                 'current-rate': 'वर्तमान दर: रु.',
                 'update-rate': 'दर अपडेट करू',
@@ -403,264 +493,78 @@ class RentalManager {
         };
     }
 
-    loadLanguage() {
-        return localStorage.getItem('appLanguage') || 'en';
+    // Tenant Management
+    loadTenants() {
+        const saved = localStorage.getItem('tenantData');
+        return saved ? JSON.parse(saved) : [];
     }
 
-    saveLanguage() {
-        localStorage.setItem('appLanguage', this.currentLanguage);
+    saveTenants() {
+        localStorage.setItem('tenantData', JSON.stringify(this.tenants));
     }
 
-    setLanguage(lang) {
-        this.currentLanguage = lang;
-        this.saveLanguage();
-        this.updateLanguageDisplay();
-        this.translatePage();
-        this.updateDashboard();
-        this.renderHistory();
-        this.showToast(this.translate('language-changed') || 'Language changed successfully!', 'success');
-    }
-
-    translate(key) {
-        return this.translations[this.currentLanguage][key] || this.translations['en'][key] || key;
-    }
-
-    translatePage() {
-        const elements = document.querySelectorAll('[data-translate]');
-        elements.forEach(element => {
-            const key = element.getAttribute('data-translate');
-            const translation = this.translate(key);
-            if (translation) {
-                element.textContent = translation;
-            }
-        });
-
-        // Update page titles
-        this.updatePageTitles();
-        
-        // Update form labels and placeholders
-        this.updateFormElements();
-        
-        // Update dropdown content
-        this.updateDropdownContent();
-        
-        // Update month selector
-        this.updateMonthSelector();
-    }
-
-    updateLanguageDisplay() {
-        const currentLangElement = document.getElementById('current-language');
-        const langMap = {
-            'en': 'EN',
-            'ne': 'नेप',
-            'mai': 'मैथ'
+    addTenant(tenantData) {
+        const tenant = {
+            id: Date.now(),
+            name: tenantData.name,
+            email: tenantData.email || '',
+            phone: tenantData.phone || '',
+            room: tenantData.room,
+            deposit: parseFloat(tenantData.deposit) || 0,
+            monthlyRent: parseFloat(tenantData.monthlyRent) || 0,
+            moveInDate: tenantData.moveInDate,
+            status: tenantData.status || 'active',
+            dateCreated: new Date().toISOString(),
+            dateModified: new Date().toISOString()
         };
         
-        if (currentLangElement) {
-            currentLangElement.textContent = langMap[this.currentLanguage] || 'EN';
-        }
+        this.tenants.push(tenant);
+        this.saveTenants();
+        return tenant;
+    }
 
-        // Update active language option
-        const languageOptions = document.querySelectorAll('.language-option');
-        languageOptions.forEach(option => {
-            option.classList.remove('active');
-            if (option.getAttribute('data-lang') === this.currentLanguage) {
-                option.classList.add('active');
+    updateTenant(id, tenantData) {
+        const index = this.tenants.findIndex(t => t.id === id);
+        if (index !== -1) {
+            this.tenants[index] = {
+                ...this.tenants[index],
+                ...tenantData,
+                dateModified: new Date().toISOString()
+            };
+            this.saveTenants();
+            return this.tenants[index];
+        }
+        return null;
+    }
+
+    deleteTenant(id) {
+        const index = this.tenants.findIndex(t => t.id === id);
+        if (index !== -1) {
+            // Check if tenant has any billing history
+            const hasHistory = this.data.some(entry => entry.tenantId === id);
+            if (hasHistory) {
+                return confirm('This tenant has billing history. Are you sure you want to delete? This will also delete all related billing records.');
             }
-        });
-    }
-
-    updatePageTitles() {
-        // Dashboard
-        const dashboardTitle = document.querySelector('#dashboard .page-header h2');
-        if (dashboardTitle) {
-            dashboardTitle.innerHTML = `<i class="fas fa-tachometer-alt"></i> ${this.translate('dashboard-title')}`;
-        }
-        
-        const dashboardSubtitle = document.querySelector('#dashboard .page-header .subtitle');
-        if (dashboardSubtitle) {
-            dashboardSubtitle.textContent = this.translate('dashboard-subtitle');
-        }
-
-        // Add Entry
-        const addEntryTitle = document.querySelector('#add-entry .page-header h2');
-        if (addEntryTitle) {
-            addEntryTitle.innerHTML = `<i class="fas fa-plus"></i> ${this.translate('add-entry-title')}`;
-        }
-        
-        const addEntrySubtitle = document.querySelector('#add-entry .page-header .subtitle');
-        if (addEntrySubtitle) {
-            addEntrySubtitle.textContent = this.translate('add-entry-subtitle');
-        }
-
-        // History
-        const historyTitle = document.querySelector('#history .page-header h2');
-        if (historyTitle) {
-            historyTitle.innerHTML = `<i class="fas fa-history"></i> ${this.translate('history-title')}`;
-        }
-        
-        const historySubtitle = document.querySelector('#history .page-header .subtitle');
-        if (historySubtitle) {
-            historySubtitle.textContent = this.translate('history-subtitle');
-        }
-
-        // Settings
-        const settingsTitle = document.querySelector('#settings .page-header h2');
-        if (settingsTitle) {
-            settingsTitle.innerHTML = `<i class="fas fa-cog"></i> ${this.translate('settings-title')}`;
-        }
-        
-        const settingsSubtitle = document.querySelector('#settings .page-header .subtitle');
-        if (settingsSubtitle) {
-            settingsSubtitle.textContent = this.translate('settings-subtitle');
-        }
-    }
-
-    updateFormElements() {
-        // Summary cards
-        const totalCard = document.querySelector('.summary-card.total .card-content h3');
-        if (totalCard) totalCard.textContent = this.translate('total-amount');
-        
-        const paidCard = document.querySelector('.summary-card.paid .card-content h3');
-        if (paidCard) paidCard.textContent = this.translate('paid-amount');
-        
-        const unpaidCard = document.querySelector('.summary-card.unpaid .card-content h3');
-        if (unpaidCard) unpaidCard.textContent = this.translate('unpaid-amount');
-
-        // Form labels
-        const rentLabel = document.querySelector('label[for="rent"]');
-        if (rentLabel) {
-            rentLabel.innerHTML = `<i class="fas fa-home"></i> ${this.translate('rent-amount')}`;
-        }
-        
-        const wifiLabel = document.querySelector('label[for="wifi"]');
-        if (wifiLabel) {
-            wifiLabel.innerHTML = `<i class="fas fa-wifi"></i> ${this.translate('wifi-bill')}`;
-        }
-
-        // Update electricity label with rate
-        this.updateElectricityLabel();
-
-        // Form placeholders
-        const notesTextarea = document.getElementById('notes');
-        if (notesTextarea) {
-            notesTextarea.placeholder = this.translate('notes-placeholder');
-        }
-
-        const searchInput = document.getElementById('search-history');
-        if (searchInput) {
-            searchInput.placeholder = this.translate('search-placeholder');
-        }
-
-        // Buttons
-        const autoFillBtn = document.getElementById('auto-fill-btn');
-        if (autoFillBtn) {
-            autoFillBtn.innerHTML = `<i class="fas fa-magic"></i> ${this.translate('auto-fill')}`;
-        }
-
-        // Filter buttons
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        filterBtns.forEach(btn => {
-            const filter = btn.getAttribute('data-filter');
-            if (filter === 'all') {
-                btn.innerHTML = `<i class="fas fa-list"></i> ${this.translate('filter-all')}`;
-            } else if (filter === 'paid') {
-                btn.innerHTML = `<i class="fas fa-check"></i> ${this.translate('filter-paid')}`;
-            } else if (filter === 'unpaid') {
-                btn.innerHTML = `<i class="fas fa-times"></i> ${this.translate('filter-unpaid')}`;
-            }
-        });
-    }
-
-    updateElectricityLabel() {
-        const electricityLabel = document.querySelector('label[for="electricity"]');
-        if (electricityLabel) {
-            electricityLabel.innerHTML = `
-                <i class="fas fa-bolt"></i>
-                ${this.translate('electricity-units')} (@ Rs. ${this.electricityRate}/unit)
-            `;
-        }
-    }
-
-    updateDropdownContent() {
-        // Update section headings in forms
-        const formSections = document.querySelectorAll('.form-section h3');
-        formSections.forEach(section => {
-            const icon = section.querySelector('i');
-            const iconClass = icon ? icon.className : '';
             
-            if (iconClass.includes('fa-calendar')) {
-                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('date-selection')}`;
-            } else if (iconClass.includes('fa-money-bill')) {
-                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('bill-details')}`;
-            } else if (iconClass.includes('fa-check')) {
-                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('payment-status')}`;
-            } else if (iconClass.includes('fa-sticky-note')) {
-                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('notes')}`;
-            }
-        });
-    }
-
-    updateMonthSelector() {
-        const monthSelect = document.getElementById('bs-month');
-        if (monthSelect) {
-            const selectedValue = monthSelect.value;
-            monthSelect.innerHTML = '';
-            
-            const months = [
-                'month-baishakh', 'month-jestha', 'month-ashadh', 'month-shrawan',
-                'month-bhadra', 'month-ashwin', 'month-kartik', 'month-mangsir',
-                'month-poush', 'month-magh', 'month-falgun', 'month-chaitra'
-            ];
-
-            months.forEach((monthKey, index) => {
-                const option = document.createElement('option');
-                option.value = index + 1;
-                option.textContent = this.translate(monthKey);
-                if (selectedValue && parseInt(selectedValue) === index + 1) {
-                    option.selected = true;
-                }
-                monthSelect.appendChild(option);
-            });
+            this.tenants.splice(index, 1);
+            // Remove all billing records for this tenant
+            this.data = this.data.filter(entry => entry.tenantId !== id);
+            this.saveTenants();
+            this.saveData();
+            return true;
         }
+        return false;
     }
 
-    setupLanguageSelector() {
-        const languageBtn = document.getElementById('language-btn');
-        const languageDropdown = document.getElementById('language-dropdown');
-        const languageOptions = document.querySelectorAll('.language-option');
-
-        if (languageBtn && languageDropdown) {
-            // Toggle dropdown
-            languageBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                languageBtn.classList.toggle('active');
-                languageDropdown.classList.toggle('show');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', () => {
-                languageBtn.classList.remove('active');
-                languageDropdown.classList.remove('show');
-            });
-
-            // Language option selection
-            languageOptions.forEach(option => {
-                option.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const selectedLang = option.getAttribute('data-lang');
-                    this.setLanguage(selectedLang);
-                    languageBtn.classList.remove('active');
-                    languageDropdown.classList.remove('show');
-                });
-            });
-        }
-
-        // Set initial active language
-        this.updateLanguageDisplay();
+    getTenant(id) {
+        return this.tenants.find(t => t.id === id);
     }
 
-    // Data management
+    getActiveTenants() {
+        return this.tenants.filter(t => t.status === 'active');
+    }
+
+    // Enhanced data management to include tenant info
     loadData() {
         const saved = localStorage.getItem('rentalData');
         return saved ? JSON.parse(saved) : [];
@@ -1204,10 +1108,11 @@ class RentalManager {
         const wifiPaid = document.getElementById('wifi-paid').checked;
         const electricityPaid = document.getElementById('electricity-paid').checked;
         const notes = document.getElementById('notes').value.trim();
+        const tenantId = parseInt(document.getElementById('select-tenant').value);
 
         // Check if entry already exists for this month/year
         const existingIndex = this.data.findIndex(entry => 
-            entry.year === year && entry.month === month
+            entry.year === year && entry.month === month && entry.tenantId === tenantId
         );
 
         const entry = {
@@ -1223,6 +1128,7 @@ class RentalManager {
             wifiPaid,
             electricityPaid,
             notes,
+            tenantId,
             dateCreated: existingIndex >= 0 ? this.data[existingIndex].dateCreated : new Date().toISOString(),
             dateModified: new Date().toISOString()
         };
@@ -1251,48 +1157,55 @@ class RentalManager {
 
     // Dashboard
     updateDashboard() {
-        const currentBsDate = this.getCurrentBikramSambatDate();
-        const currentMonthData = this.data.find(entry => 
+        if (!this.currentBsDate) {
+            this.getCurrentBikramSambatDate().then(bsDate => {
+                this.currentBsDate = bsDate;
+                this.updateDashboardWithCurrentDate();
+            });
+        } else {
+            this.updateDashboardWithCurrentDate();
+        }
+    }
+
+    updateDashboardWithCurrentDate() {
+        const currentBsDate = this.currentBsDate;
+        
+        // Get all entries for current month
+        const currentMonthEntries = this.data.filter(entry => 
             entry.year === currentBsDate.year && entry.month === currentBsDate.month
         );
 
+        // Calculate totals
+        let totalAmount = 0;
+        let paidAmount = 0;
+        let unpaidAmount = 0;
+
+        currentMonthEntries.forEach(entry => {
+            const entryTotal = entry.rent + entry.wifi + entry.electricity;
+            totalAmount += entryTotal;
+
+            let entryPaid = 0;
+            if (entry.rentPaid) entryPaid += entry.rent;
+            if (entry.wifiPaid) entryPaid += entry.wifi;
+            if (entry.electricityPaid) entryPaid += entry.electricity;
+            
+            paidAmount += entryPaid;
+            unpaidAmount += (entryTotal - entryPaid);
+        });
+
         // Update summary cards
-        this.updateSummaryCards(currentMonthData);
-        
-        // Update current bills list
-        this.updateCurrentBillsList(currentMonthData);
+        document.getElementById('total-amount').textContent = `Rs. ${this.formatCurrency(totalAmount)}`;
+        document.getElementById('paid-amount').textContent = `Rs. ${this.formatCurrency(paidAmount)}`;
+        document.getElementById('unpaid-amount').textContent = `Rs. ${this.formatCurrency(unpaidAmount)}`;
+
+        // Update separated tenant lists
+        this.updateSeparatedTenantLists(currentMonthEntries);
     }
 
-    updateSummaryCards(data) {
-        const totalElement = document.getElementById('total-amount');
-        const paidElement = document.getElementById('paid-amount');
-        const unpaidElement = document.getElementById('unpaid-amount');
-
-        if (!data) {
-            totalElement.textContent = 'Rs. 0';
-            paidElement.textContent = 'Rs. 0';
-            unpaidElement.textContent = 'Rs. 0';
-            return;
-        }
-
-        const total = data.rent + data.wifi + data.electricity;
-        let paid = 0;
-        
-        if (data.rentPaid) paid += data.rent;
-        if (data.wifiPaid) paid += data.wifi;
-        if (data.electricityPaid) paid += data.electricity;
-        
-        const unpaid = total - paid;
-
-        totalElement.textContent = `Rs. ${this.formatCurrency(total)}`;
-        paidElement.textContent = `Rs. ${this.formatCurrency(paid)}`;
-        unpaidElement.textContent = `Rs. ${this.formatCurrency(unpaid)}`;
-    }
-
-    updateCurrentBillsList(data) {
+    updateSeparatedTenantLists(currentMonthEntries) {
         const container = document.getElementById('current-bills-list');
         
-        if (!data) {
+        if (currentMonthEntries.length === 0) {
             container.innerHTML = `
                 <div class="no-data">
                     <i class="fas fa-info-circle"></i>
@@ -1306,34 +1219,475 @@ class RentalManager {
             return;
         }
 
-        const bills = [
-            { name: 'Rent', icon: 'fas fa-home', amount: data.rent, paid: data.rentPaid },
-            { name: 'WiFi', icon: 'fas fa-wifi', amount: data.wifi, paid: data.wifiPaid },
-            { 
-                name: `Electricity (${data.electricityUnits || 0} units)`, 
-                icon: 'fas fa-bolt', 
-                amount: data.electricity, 
-                paid: data.electricityPaid 
-            }
-        ];
+        // Separate tenants by payment status
+        const fullyPaidTenants = [];
+        const unpaidTenants = [];
 
-        container.innerHTML = bills.map(bill => `
-            <div class="bill-item">
-                <div class="bill-name">
-                    <i class="${bill.icon}"></i>
-                    ${bill.name}
+        currentMonthEntries.forEach(entry => {
+            const tenant = this.getTenant(entry.tenantId);
+            if (!tenant) return;
+
+            const total = entry.rent + entry.wifi + entry.electricity;
+            const paidCount = [entry.rentPaid, entry.wifiPaid, entry.electricityPaid].filter(Boolean).length;
+            
+            const tenantInfo = {
+                tenant,
+                entry,
+                total,
+                paidCount,
+                fullyPaid: paidCount === 3
+            };
+
+            if (tenantInfo.fullyPaid) {
+                fullyPaidTenants.push(tenantInfo);
+            } else {
+                unpaidTenants.push(tenantInfo);
+            }
+        });
+
+        // Render separated lists
+        container.innerHTML = `
+            <div class="tenant-separation">
+                <div class="paid-tenants-section">
+                    <h4 class="section-title paid">
+                        <i class="fas fa-check-circle"></i>
+                        Tenants with All Bills Paid (${fullyPaidTenants.length})
+                    </h4>
+                    <div class="tenant-bills-list">
+                        ${fullyPaidTenants.length > 0 ? 
+                            fullyPaidTenants.map(info => this.createTenantBillItem(info)).join('') :
+                            '<p class="no-tenants-message">No tenants have fully paid this month</p>'
+                        }
+                    </div>
                 </div>
-                <div class="bill-amount">Rs. ${this.formatCurrency(bill.amount)}</div>
-                <div class="bill-status ${bill.paid ? 'paid' : 'unpaid'}">
-                    ${bill.paid ? 'Paid' : 'Unpaid'}
+                
+                <div class="unpaid-tenants-section">
+                    <h4 class="section-title unpaid">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Tenants with Unpaid Bills (${unpaidTenants.length})
+                    </h4>
+                    <div class="tenant-bills-list">
+                        ${unpaidTenants.length > 0 ? 
+                            unpaidTenants.map(info => this.createTenantBillItem(info)).join('') :
+                            '<p class="no-tenants-message">All tenants have paid their bills</p>'
+                        }
+                    </div>
                 </div>
             </div>
-        `).join('');
+        `;
     }
 
-    // History
+    createTenantBillItem(tenantInfo) {
+        const { tenant, entry, total, paidCount, fullyPaid } = tenantInfo;
+        const statusClass = fullyPaid ? 'fully-paid' : 'unpaid';
+        
+        const bills = [
+            { name: 'Rent', icon: 'fas fa-home', amount: entry.rent, paid: entry.rentPaid },
+            { name: 'WiFi', icon: 'fas fa-wifi', amount: entry.wifi, paid: entry.wifiPaid },
+            { name: 'Electricity', icon: 'fas fa-bolt', amount: entry.electricity, paid: entry.electricityPaid }
+        ];
+
+        return `
+            <div class="tenant-bill-card ${statusClass}">
+                <div class="tenant-bill-header">
+                    <div class="tenant-name">
+                        <i class="fas fa-user"></i>
+                        <strong>${tenant.name}</strong>
+                        <span class="room-number">Room ${tenant.room}</span>
+                    </div>
+                    <div class="payment-progress">
+                        <span class="progress-text">${paidCount}/3 Paid</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${(paidCount/3)*100}%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bill-details">
+                    ${bills.map(bill => `
+                        <div class="bill-row">
+                            <div class="bill-info">
+                                <i class="${bill.icon}"></i>
+                                <span>${bill.name}</span>
+                            </div>
+                            <div class="bill-amount">Rs. ${this.formatCurrency(bill.amount)}</div>
+                            <div class="bill-status-indicator ${bill.paid ? 'paid' : 'unpaid'}">
+                                <i class="fas ${bill.paid ? 'fa-check' : 'fa-times'}"></i>
+                            </div>
+                        </div>
+                    `).join('')}
+                    
+                    <div class="bill-total">
+                        <div class="bill-info">
+                            <i class="fas fa-calculator"></i>
+                            <strong>Total</strong>
+                        </div>
+                        <div class="bill-amount"><strong>Rs. ${this.formatCurrency(total)}</strong></div>
+                        <div class="bill-status-indicator ${fullyPaid ? 'paid' : 'unpaid'}">
+                            <i class="fas ${fullyPaid ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tenant-bill-actions">
+                    <button class="btn btn-sm btn-secondary" onclick="app.editEntryByTenant(${entry.tenantId}, ${entry.year}, ${entry.month})">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    editEntryByTenant(tenantId, year, month) {
+        const entry = this.data.find(e => 
+            e.tenantId === tenantId && e.year === year && e.month === month
+        );
+        if (entry) {
+            this.editEntry(entry.id);
+        }
+    }
+
+    // Modal management
+    setupModals() {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            const closeBtn = modal.querySelector('.close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    this.hideModal(modal.id);
+                });
+            }
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.hideModal(modal.id);
+                }
+            });
+        });
+    }
+
+    showModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    hideModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    // Toast notifications
+    showToast(message, type = 'info') {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icon = type === 'success' ? 'fa-check-circle' : 
+                    type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+        
+        toast.innerHTML = `
+            <i class="fas ${icon}"></i>
+            <span>${message}</span>
+        `;
+
+        container.appendChild(toast);
+
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }
+
+    // Language management
+    loadLanguage() {
+        return localStorage.getItem('appLanguage') || 'en';
+    }
+
+    saveLanguage() {
+        localStorage.setItem('appLanguage', this.currentLanguage);
+    }
+
+    setLanguage(lang) {
+        this.currentLanguage = lang;
+        this.saveLanguage();
+        this.updateLanguageDisplay();
+        this.translatePage();
+        this.updateDashboard();
+        this.renderHistory();
+        this.populateTenantSelector();
+        this.renderTenants();
+        this.showToast(this.translate('language-changed') || 'Language changed successfully!', 'success');
+    }
+
+    translate(key) {
+        return this.translations[this.currentLanguage][key] || this.translations['en'][key] || key;
+    }
+
+    translatePage() {
+        const elements = document.querySelectorAll('[data-translate]');
+        elements.forEach(element => {
+            const key = element.getAttribute('data-translate');
+            const translation = this.translate(key);
+            if (translation) {
+                element.textContent = translation;
+            }
+        });
+
+        // Update page titles
+        this.updatePageTitles();
+        
+        // Update form labels and placeholders
+        this.updateFormElements();
+        
+        // Update dropdown content
+        this.updateDropdownContent();
+        
+        // Update month selector
+        this.updateMonthSelector();
+    }
+
+    updateLanguageDisplay() {
+        const currentLangElement = document.getElementById('current-language');
+        const langMap = {
+            'en': 'EN',
+            'ne': 'नेप',
+            'mai': 'मैथ'
+        };
+        
+        if (currentLangElement) {
+            currentLangElement.textContent = langMap[this.currentLanguage] || 'EN';
+        }
+
+        // Update active language option
+        const languageOptions = document.querySelectorAll('.language-option');
+        languageOptions.forEach(option => {
+            option.classList.remove('active');
+            if (option.getAttribute('data-lang') === this.currentLanguage) {
+                option.classList.add('active');
+            }
+        });
+    }
+
+    updatePageTitles() {
+        // Dashboard
+        const dashboardTitle = document.querySelector('#dashboard .page-header h2');
+        if (dashboardTitle) {
+            dashboardTitle.innerHTML = `<i class="fas fa-tachometer-alt"></i> ${this.translate('dashboard-title')}`;
+        }
+        
+        const dashboardSubtitle = document.querySelector('#dashboard .page-header .subtitle');
+        if (dashboardSubtitle) {
+            dashboardSubtitle.textContent = this.translate('dashboard-subtitle');
+        }
+
+        // Tenants
+        const tenantsTitle = document.querySelector('#tenants .page-header h2');
+        if (tenantsTitle) {
+            tenantsTitle.innerHTML = `<i class="fas fa-users"></i> ${this.translate('tenants-title')}`;
+        }
+        
+        const tenantsSubtitle = document.querySelector('#tenants .page-header .subtitle');
+        if (tenantsSubtitle) {
+            tenantsSubtitle.textContent = this.translate('tenants-subtitle');
+        }
+
+        // Add Entry
+        const addEntryTitle = document.querySelector('#add-entry .page-header h2');
+        if (addEntryTitle) {
+            addEntryTitle.innerHTML = `<i class="fas fa-plus"></i> ${this.translate('add-entry-title')}`;
+        }
+        
+        const addEntrySubtitle = document.querySelector('#add-entry .page-header .subtitle');
+        if (addEntrySubtitle) {
+            addEntrySubtitle.textContent = this.translate('add-entry-subtitle');
+        }
+
+        // History
+        const historyTitle = document.querySelector('#history .page-header h2');
+        if (historyTitle) {
+            historyTitle.innerHTML = `<i class="fas fa-history"></i> ${this.translate('history-title')}`;
+        }
+        
+        const historySubtitle = document.querySelector('#history .page-header .subtitle');
+        if (historySubtitle) {
+            historySubtitle.textContent = this.translate('history-subtitle');
+        }
+
+        // Settings
+        const settingsTitle = document.querySelector('#settings .page-header h2');
+        if (settingsTitle) {
+            settingsTitle.innerHTML = `<i class="fas fa-cog"></i> ${this.translate('settings-title')}`;
+        }
+        
+        const settingsSubtitle = document.querySelector('#settings .page-header .subtitle');
+        if (settingsSubtitle) {
+            settingsSubtitle.textContent = this.translate('settings-subtitle');
+        }
+    }
+
+    updateFormElements() {
+        // Summary cards
+        const totalCard = document.querySelector('.summary-card.total .card-content h3');
+        if (totalCard) totalCard.textContent = this.translate('total-amount');
+        
+        const paidCard = document.querySelector('.summary-card.paid .card-content h3');
+        if (paidCard) paidCard.textContent = this.translate('paid-amount');
+        
+        const unpaidCard = document.querySelector('.summary-card.unpaid .card-content h3');
+        if (unpaidCard) unpaidCard.textContent = this.translate('unpaid-amount');
+
+        // Form labels
+        const rentLabel = document.querySelector('label[for="rent"]');
+        if (rentLabel) {
+            rentLabel.innerHTML = `<i class="fas fa-home"></i> ${this.translate('rent-amount')}`;
+        }
+        
+        const wifiLabel = document.querySelector('label[for="wifi"]');
+        if (wifiLabel) {
+            wifiLabel.innerHTML = `<i class="fas fa-wifi"></i> ${this.translate('wifi-bill')}`;
+        }
+
+        // Update electricity label with rate
+        this.updateElectricityLabel();
+
+        // Form placeholders
+        const notesTextarea = document.getElementById('notes');
+        if (notesTextarea) {
+            notesTextarea.placeholder = this.translate('notes-placeholder');
+        }
+
+        const searchInput = document.getElementById('search-history');
+        if (searchInput) {
+            searchInput.placeholder = this.translate('search-placeholder');
+        }
+
+        // Buttons
+        const autoFillBtn = document.getElementById('auto-fill-btn');
+        if (autoFillBtn) {
+            autoFillBtn.innerHTML = `<i class="fas fa-magic"></i> ${this.translate('auto-fill')}`;
+        }
+
+        // Filter buttons
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            const filter = btn.getAttribute('data-filter');
+            if (filter === 'all') {
+                btn.innerHTML = `<i class="fas fa-list"></i> ${this.translate('filter-all')}`;
+            } else if (filter === 'paid') {
+                btn.innerHTML = `<i class="fas fa-check"></i> ${this.translate('filter-paid')}`;
+            } else if (filter === 'unpaid') {
+                btn.innerHTML = `<i class="fas fa-times"></i> ${this.translate('filter-unpaid')}`;
+            }
+        });
+    }
+
+    updateElectricityLabel() {
+        const electricityLabel = document.querySelector('label[for="electricity"]');
+        if (electricityLabel) {
+            electricityLabel.innerHTML = `
+                <i class="fas fa-bolt"></i>
+                ${this.translate('electricity-units')} (@ Rs. ${this.electricityRate}/unit)
+            `;
+        }
+    }
+
+    updateDropdownContent() {
+        // Update section headings in forms
+        const formSections = document.querySelectorAll('.form-section h3');
+        formSections.forEach(section => {
+            const icon = section.querySelector('i');
+            const iconClass = icon ? icon.className : '';
+            
+            if (iconClass.includes('fa-calendar')) {
+                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('date-selection')}`;
+            } else if (iconClass.includes('fa-money-bill')) {
+                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('bill-details')}`;
+            } else if (iconClass.includes('fa-check')) {
+                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('payment-status')}`;
+            } else if (iconClass.includes('fa-sticky-note')) {
+                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('notes')}`;
+            } else if (iconClass.includes('fa-user')) {
+                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('select-tenant')}`;
+            }
+        });
+    }
+
+    updateMonthSelector() {
+        const monthSelect = document.getElementById('bs-month');
+        if (monthSelect) {
+            const selectedValue = monthSelect.value;
+            monthSelect.innerHTML = '';
+            
+            const months = [
+                'month-baishakh', 'month-jestha', 'month-ashadh', 'month-shrawan',
+                'month-bhadra', 'month-ashwin', 'month-kartik', 'month-mangsir',
+                'month-poush', 'month-magh', 'month-falgun', 'month-chaitra'
+            ];
+
+            months.forEach((monthKey, index) => {
+                const option = document.createElement('option');
+                option.value = index + 1;
+                option.textContent = this.translate(monthKey);
+                if (selectedValue && parseInt(selectedValue) === index + 1) {
+                    option.selected = true;
+                }
+                monthSelect.appendChild(option);
+            });
+        }
+    }
+
+    setupLanguageSelector() {
+        const languageBtn = document.getElementById('language-btn');
+        const languageDropdown = document.getElementById('language-dropdown');
+        const languageOptions = document.querySelectorAll('.language-option');
+
+        if (languageBtn && languageDropdown) {
+            // Toggle dropdown
+            languageBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                languageBtn.classList.toggle('active');
+                languageDropdown.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', () => {
+                languageBtn.classList.remove('active');
+                languageDropdown.classList.remove('show');
+            });
+
+            // Language option selection
+            languageOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const selectedLang = option.getAttribute('data-lang');
+                    this.setLanguage(selectedLang);
+                    languageBtn.classList.remove('active');
+                    languageDropdown.classList.remove('show');
+                });
+            });
+        }
+
+        // Set initial active language
+        this.updateLanguageDisplay();
+    }
+
+    // History functions
     renderHistory(filteredData = null) {
         const container = document.getElementById('history-list');
+        if (!container) return;
+        
         const dataToRender = filteredData || this.data;
         
         if (dataToRender.length === 0) {
@@ -1360,6 +1714,10 @@ class RentalManager {
     }
 
     createHistoryItem(entry) {
+        const tenant = this.getTenant(entry.tenantId);
+        const tenantName = tenant ? tenant.name : 'Unknown Tenant';
+        const tenantRoom = tenant ? tenant.room : 'N/A';
+        
         const monthName = this.getBikramSambatMonthName(entry.month);
         const total = entry.rent + entry.wifi + entry.electricity;
         const paidCount = [entry.rentPaid, entry.wifiPaid, entry.electricityPaid].filter(Boolean).length;
@@ -1382,7 +1740,10 @@ class RentalManager {
         return `
             <div class="history-item ${statusClass}">
                 <div class="history-header">
-                    <div class="history-date">${monthName} ${entry.year}</div>
+                    <div class="history-date">
+                        <h3>${tenantName} - Room ${tenantRoom}</h3>
+                        <p>${monthName} ${entry.year}</p>
+                    </div>
                     <div class="history-actions">
                         <button class="action-btn edit" onclick="app.editEntry(${entry.id})" title="Edit Entry">
                             <i class="fas fa-edit"></i>
@@ -1438,12 +1799,17 @@ class RentalManager {
         }
 
         const filteredData = this.data.filter(entry => {
+            const tenant = this.getTenant(entry.tenantId);
+            const tenantName = tenant ? tenant.name.toLowerCase() : '';
+            const tenantRoom = tenant ? tenant.room.toLowerCase() : '';
             const monthName = this.getBikramSambatMonthName(entry.month).toLowerCase();
             const year = entry.year.toString();
             const notes = entry.notes.toLowerCase();
             const searchTerm = query.toLowerCase();
 
-            return monthName.includes(searchTerm) || 
+            return tenantName.includes(searchTerm) || 
+                   tenantRoom.includes(searchTerm) ||
+                   monthName.includes(searchTerm) || 
                    year.includes(searchTerm) || 
                    notes.includes(searchTerm);
         });
@@ -1482,7 +1848,7 @@ class RentalManager {
         this.renderHistory(filteredData);
     }
 
-    // Edit and Delete
+    // Edit and Delete functions
     editEntry(id) {
         const entry = this.data.find(e => e.id === id);
         if (!entry) return;
@@ -1494,9 +1860,19 @@ class RentalManager {
 
     populateEditForm(entry) {
         const editForm = document.getElementById('edit-form');
+        const tenant = this.getTenant(entry.tenantId);
+        const tenantName = tenant ? tenant.name : 'Unknown Tenant';
         const electricityUnits = entry.electricityUnits || (entry.electricity / (entry.electricityRate || this.electricityRate));
         
         editForm.innerHTML = `
+            <div class="form-section">
+                <h3><i class="fas fa-user"></i> Tenant</h3>
+                <div class="form-group">
+                    <label>Tenant</label>
+                    <input type="text" value="${tenantName}" readonly style="background: #f7fafc;">
+                </div>
+            </div>
+            
             <div class="form-section">
                 <h3><i class="fas fa-calendar"></i> Date</h3>
                 <div class="form-row">
@@ -1623,7 +1999,7 @@ class RentalManager {
         this.updateDashboard();
         this.renderHistory();
         this.hideModal('edit-modal');
-        this.showToast(this.translate('entry-updated'), 'success');
+        this.showToast('Entry updated successfully!', 'success');
     }
 
     getBikramSambatMonthName(monthNumber) {
@@ -1636,38 +2012,21 @@ class RentalManager {
         return monthKey ? this.translate(monthKey) : 'Unknown';
     }
 
-    getBikramSambatDayName(dayNumber) {
-        const dayKeys = [
-            'sunday', 'monday', 'tuesday', 'wednesday',
-            'thursday', 'friday', 'saturday'
-        ];
-        const dayKey = dayKeys[dayNumber];
-        return dayKey ? this.translate(dayKey) : this.translate('monday');
-    }
-
     deleteEntry(id) {
         this.currentDeleteId = id;
         this.showModal('delete-modal');
-        
-        // Update delete modal text
-        const deleteWarning = document.querySelector('#delete-modal .modal-body p');
-        if (deleteWarning) {
-            deleteWarning.textContent = this.translate('delete-warning');
-        }
         
         // Setup delete confirmation
         const confirmDelete = document.getElementById('confirm-delete');
         const cancelDelete = document.getElementById('cancel-delete');
         
         if (confirmDelete) {
-            confirmDelete.innerHTML = `<i class="fas fa-trash"></i> ${this.translate('delete')}`;
             confirmDelete.onclick = () => {
                 this.confirmDelete();
             };
         }
         
         if (cancelDelete) {
-            cancelDelete.innerHTML = `<i class="fas fa-times"></i> ${this.translate('cancel')}`;
             cancelDelete.onclick = () => {
                 this.hideModal('delete-modal');
             };
@@ -1682,13 +2041,19 @@ class RentalManager {
             this.updateDashboard();
             this.renderHistory();
             this.hideModal('delete-modal');
-            this.showToast(this.translate('entry-deleted') || 'Entry deleted successfully!', 'success');
+            this.showToast('Entry deleted successfully!', 'success');
         }
     }
 
     autoFillPreviousMonth() {
+        const selectedTenantId = parseInt(document.getElementById('select-tenant').value);
         const currentYear = parseInt(document.getElementById('bs-year').value);
         const currentMonth = parseInt(document.getElementById('bs-month').value);
+        
+        if (!selectedTenantId) {
+            this.showToast('Please select a tenant first', 'error');
+            return;
+        }
         
         let prevMonth = currentMonth - 1;
         let prevYear = currentYear;
@@ -1699,7 +2064,7 @@ class RentalManager {
         }
         
         const previousEntry = this.data.find(entry => 
-            entry.year === prevYear && entry.month === prevMonth
+            entry.tenantId === selectedTenantId && entry.year === prevYear && entry.month === prevMonth
         );
         
         if (previousEntry) {
@@ -1707,72 +2072,428 @@ class RentalManager {
             document.getElementById('wifi').value = previousEntry.wifi;
             document.getElementById('electricity').value = previousEntry.electricityUnits || 0;
             this.updateElectricityCalculation();
-            this.showToast(this.translate('auto-filled') || 'Previous month data filled!', 'success');
+            this.showToast('Previous month data filled!', 'success');
         } else {
-            this.showToast(this.translate('no-previous-data') || 'No previous month data found', 'info');
+            this.showToast('No previous month data found for this tenant', 'info');
         }
     }
 
-    // Modal management
-    setupModals() {
-        const modals = document.querySelectorAll('.modal');
-        modals.forEach(modal => {
-            const closeBtn = modal.querySelector('.close-btn');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    this.hideModal(modal.id);
-                });
-            }
+    // Tenant UI functions
+    populateTenantSelector() {
+        const tenantSelect = document.getElementById('select-tenant');
+        if (!tenantSelect) return;
 
-            // Close modal when clicking outside
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    this.hideModal(modal.id);
+        const currentValue = tenantSelect.value;
+        tenantSelect.innerHTML = '<option value="">-- Select Tenant --</option>';
+        
+        const activeTenants = this.getActiveTenants();
+        activeTenants.forEach(tenant => {
+            const option = document.createElement('option');
+            option.value = tenant.id;
+            option.textContent = `${tenant.name} (${tenant.room})`;
+            if (currentValue && parseInt(currentValue) === tenant.id) {
+                option.selected = true;
+            }
+            tenantSelect.appendChild(option);
+        });
+
+        // Auto-select rent amount when tenant is selected
+        tenantSelect.addEventListener('change', () => {
+            const selectedTenantId = parseInt(tenantSelect.value);
+            if (selectedTenantId) {
+                const tenant = this.getTenant(selectedTenantId);
+                if (tenant) {
+                    const rentInput = document.getElementById('rent');
+                    if (rentInput && tenant.monthlyRent) {
+                        rentInput.value = tenant.monthlyRent;
+                    }
                 }
-            });
+            }
         });
     }
 
-    showModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-    }
-
-    hideModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    }
-
-    // Toast notifications
-    showToast(message, type = 'info') {
-        const container = document.getElementById('toast-container');
+    renderTenants() {
+        const container = document.getElementById('tenants-list');
         if (!container) return;
 
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        
-        const icon = type === 'success' ? 'fa-check-circle' : 
-                    type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
-        
-        toast.innerHTML = `
-            <i class="fas ${icon}"></i>
-            <span>${message}</span>
-        `;
+        if (this.tenants.length === 0) {
+            container.innerHTML = `
+                <div class="no-data">
+                    <i class="fas fa-users"></i>
+                    <p data-translate="no-tenants">No tenants added yet</p>
+                    <button class="btn btn-primary" onclick="app.showAddTenantModal()">
+                        <i class="fas fa-user-plus"></i>
+                        <span data-translate="add-first-tenant">Add First Tenant</span>
+                    </button>
+                </div>
+            `;
+            return;
+        }
 
-        container.appendChild(toast);
-
-        // Auto remove after 3 seconds
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
+        // Sort tenants by status (active first) then by name
+        const sortedTenants = [...this.tenants].sort((a, b) => {
+            if (a.status !== b.status) {
+                return a.status === 'active' ? -1 : 1;
             }
-        }, 3000);
+            return a.name.localeCompare(b.name);
+        });
+
+        container.innerHTML = sortedTenants.map(tenant => this.createTenantCard(tenant)).join('');
+    }
+
+    createTenantCard(tenant) {
+        const statusClass = tenant.status === 'active' ? 'active' : 'inactive';
+        const statusIcon = tenant.status === 'active' ? 'fa-check-circle' : 'fa-pause-circle';
+        
+        return `
+            <div class="tenant-card ${statusClass}">
+                <div class="tenant-header">
+                    <div class="tenant-info">
+                        <h3>${tenant.name}</h3>
+                        <span class="tenant-room">
+                            <i class="fas fa-door-open"></i>
+                            Room ${tenant.room}
+                        </span>
+                    </div>
+                    <div class="tenant-status">
+                        <span class="status-badge ${statusClass}">
+                            <i class="fas ${statusIcon}"></i>
+                            ${this.translate(tenant.status === 'active' ? 'status-active' : 'status-inactive')}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="tenant-details">
+                    ${tenant.email ? `
+                        <div class="detail-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>${tenant.email}</span>
+                        </div>
+                    ` : ''}
+                    ${tenant.phone ? `
+                        <div class="detail-item">
+                            <i class="fas fa-phone"></i>
+                            <span>${tenant.phone}</span>
+                        </div>
+                    ` : ''}
+                    <div class="detail-item">
+                        <i class="fas fa-home"></i>
+                        <span>Rs. ${this.formatCurrency(tenant.monthlyRent)}/month</span>
+                    </div>
+                    ${tenant.deposit > 0 ? `
+                        <div class="detail-item">
+                            <i class="fas fa-piggy-bank"></i>
+                            <span>Deposit: Rs. ${this.formatCurrency(tenant.deposit)}</span>
+                        </div>
+                    ` : ''}
+                    ${tenant.moveInDate ? `
+                        <div class="detail-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>Move-in: ${new Date(tenant.moveInDate).toLocaleDateString()}</span>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="tenant-actions">
+                    <button class="action-btn edit" onclick="app.editTenant(${tenant.id})" title="Edit Tenant">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn delete" onclick="app.deleteTenantConfirm(${tenant.id})" title="Delete Tenant">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    showAddTenantModal() {
+        const form = document.getElementById('tenant-form');
+        if (form) {
+            form.reset();
+            // Set default move-in date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tenant-move-in').value = today;
+        }
+        
+        this.showModal('add-tenant-modal');
+        
+        // Setup form submission
+        if (form && !form.hasSubmitListener) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleTenantSubmit();
+            });
+            form.hasSubmitListener = true;
+        }
+    }
+
+    handleTenantSubmit() {
+        const formData = {
+            name: document.getElementById('tenant-name').value.trim(),
+            email: document.getElementById('tenant-email').value.trim(),
+            phone: document.getElementById('tenant-phone').value.trim(),
+            room: document.getElementById('tenant-room').value.trim(),
+            status: document.getElementById('tenant-status').value,
+            monthlyRent: document.getElementById('tenant-rent').value,
+            deposit: document.getElementById('tenant-deposit').value,
+            moveInDate: document.getElementById('tenant-move-in').value
+        };
+
+        if (!formData.name || !formData.room || !formData.monthlyRent) {
+            this.showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        // Check if room number already exists
+        const existingTenant = this.tenants.find(t => 
+            t.room.toLowerCase() === formData.room.toLowerCase() && t.status === 'active'
+        );
+        
+        if (existingTenant) {
+            this.showToast('Room number already occupied by an active tenant', 'error');
+            return;
+        }
+
+        this.addTenant(formData);
+        this.hideModal('add-tenant-modal');
+        this.renderTenants();
+        this.populateTenantSelector();
+        this.updateTenantOverview();
+        this.showToast(`Tenant ${formData.name} added successfully!`, 'success');
+    }
+
+    editTenant(id) {
+        const tenant = this.getTenant(id);
+        if (!tenant) return;
+
+        this.currentEditTenantId = id;
+        this.populateEditTenantForm(tenant);
+        this.showModal('edit-tenant-modal');
+    }
+
+    populateEditTenantForm(tenant) {
+        const editForm = document.getElementById('edit-tenant-form');
+        
+        editForm.innerHTML = `
+            <div class="form-section">
+                <h3>
+                    <i class="fas fa-id-card"></i>
+                    <span data-translate="tenant-details">Tenant Details</span>
+                </h3>
+                <div class="form-group">
+                    <label for="edit-tenant-name">
+                        <i class="fas fa-user"></i>
+                        <span data-translate="tenant-name">Tenant Name</span>
+                    </label>
+                    <input type="text" id="edit-tenant-name" value="${tenant.name}" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-tenant-email">
+                            <i class="fas fa-envelope"></i>
+                            <span data-translate="tenant-email">Email (Optional)</span>
+                        </label>
+                        <input type="email" id="edit-tenant-email" value="${tenant.email || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-tenant-phone">
+                            <i class="fas fa-phone"></i>
+                            <span data-translate="tenant-phone">Phone (Optional)</span>
+                        </label>
+                        <input type="tel" id="edit-tenant-phone" value="${tenant.phone || ''}">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-tenant-room">
+                            <i class="fas fa-door-open"></i>
+                            <span data-translate="tenant-room">Room/Unit Number</span>
+                        </label>
+                        <input type="text" id="edit-tenant-room" value="${tenant.room}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-tenant-status">
+                            <i class="fas fa-toggle-on"></i>
+                            <span data-translate="tenant-status">Status</span>
+                        </label>
+                        <select id="edit-tenant-status">
+                            <option value="active" ${tenant.status === 'active' ? 'selected' : ''} data-translate="status-active">Active</option>
+                            <option value="inactive" ${tenant.status === 'inactive' ? 'selected' : ''} data-translate="status-inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3>
+                    <i class="fas fa-money-bill"></i>
+                    Financial Details
+                </h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-tenant-rent">
+                            <i class="fas fa-home"></i>
+                            <span data-translate="tenant-rent">Monthly Rent (Rs.)</span>
+                        </label>
+                        <input type="number" id="edit-tenant-rent" value="${tenant.monthlyRent}" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-tenant-deposit">
+                            <i class="fas fa-piggy-bank"></i>
+                            <span data-translate="tenant-deposit">Security Deposit (Rs.)</span>
+                        </label>
+                        <input type="number" id="edit-tenant-deposit" value="${tenant.deposit || 0}" min="0" step="0.01">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-tenant-move-in">
+                        <i class="fas fa-calendar"></i>
+                        <span data-translate="tenant-move-in">Move-in Date</span>
+                    </label>
+                    <input type="date" id="edit-tenant-move-in" value="${tenant.moveInDate || ''}">
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button type="button" class="btn btn-primary" onclick="app.saveTenantEdit()">
+                    <i class="fas fa-save"></i>
+                    <span data-translate="save-changes">Save Changes</span>
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="app.hideModal('edit-tenant-modal')">
+                    <i class="fas fa-times"></i>
+                    <span data-translate="cancel">Cancel</span>
+                </button>
+            </div>
+        `;
+    }
+
+    saveTenantEdit() {
+        const formData = {
+            name: document.getElementById('edit-tenant-name').value.trim(),
+            email: document.getElementById('edit-tenant-email').value.trim(),
+            phone: document.getElementById('edit-tenant-phone').value.trim(),
+            room: document.getElementById('edit-tenant-room').value.trim(),
+            status: document.getElementById('edit-tenant-status').value,
+            monthlyRent: parseFloat(document.getElementById('edit-tenant-rent').value),
+            deposit: parseFloat(document.getElementById('edit-tenant-deposit').value) || 0,
+            moveInDate: document.getElementById('edit-tenant-move-in').value
+        };
+
+        if (!formData.name || !formData.room || !formData.monthlyRent) {
+            this.showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        // Check if room number conflicts with other tenants
+        const existingTenant = this.tenants.find(t => 
+            t.room.toLowerCase() === formData.room.toLowerCase() && 
+            t.status === 'active' && 
+            t.id !== this.currentEditTenantId
+        );
+        
+        if (existingTenant) {
+            this.showToast('Room number already occupied by another active tenant', 'error');
+            return;
+        }
+
+        const updatedTenant = this.updateTenant(this.currentEditTenantId, formData);
+        if (updatedTenant) {
+            this.hideModal('edit-tenant-modal');
+            this.renderTenants();
+            this.populateTenantSelector();
+            this.updateTenantOverview();
+            this.showToast(`Tenant ${formData.name} updated successfully!`, 'success');
+        }
+    }
+
+    deleteTenantConfirm(id) {
+        const tenant = this.getTenant(id);
+        if (!tenant) return;
+
+        this.currentDeleteTenantId = id;
+        this.showModal('delete-tenant-modal');
+        
+        // Update modal content
+        const deleteWarning = document.querySelector('#delete-tenant-modal .modal-body p');
+        if (deleteWarning) {
+            deleteWarning.textContent = `Are you sure you want to delete tenant "${tenant.name}"? This will also delete all their billing records and cannot be undone.`;
+        }
+        
+        // Setup delete confirmation
+        const confirmDelete = document.getElementById('confirm-delete-tenant');
+        const cancelDelete = document.getElementById('cancel-delete-tenant');
+        
+        if (confirmDelete) {
+            confirmDelete.onclick = () => {
+                this.confirmTenantDelete();
+            };
+        }
+        
+        if (cancelDelete) {
+            cancelDelete.onclick = () => {
+                this.hideModal('delete-tenant-modal');
+            };
+        }
+    }
+
+    confirmTenantDelete() {
+        const tenant = this.getTenant(this.currentDeleteTenantId);
+        if (!tenant) return;
+
+        if (this.deleteTenant(this.currentDeleteTenantId)) {
+            this.hideModal('delete-tenant-modal');
+            this.renderTenants();
+            this.populateTenantSelector();
+            this.updateTenantOverview();
+            this.updateDashboard();
+            this.renderHistory();
+            this.showToast(`Tenant ${tenant.name} deleted successfully!`, 'success');
+        }
+    }
+
+    updateTenantOverview() {
+        const container = document.getElementById('tenant-overview');
+        if (!container) return;
+
+        // Calculate totals for active tenants
+        const activeTenants = this.getActiveTenants();
+        const totalRent = activeTenants.reduce((sum, tenant) => sum + tenant.monthlyRent, 0);
+        const totalDeposit = activeTenants.reduce((sum, tenant) => sum + tenant.deposit, 0);
+
+        container.innerHTML = `
+            <div class="overview-cards">
+                <div class="overview-card">
+                    <div class="overview-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="overview-content">
+                        <h3>Active Tenants</h3>
+                        <p>${activeTenants.length}</p>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="overview-content">
+                        <h3>Monthly Rent</h3>
+                        <p>Rs. ${this.formatCurrency(totalRent)}</p>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <div class="overview-content">
+                        <h3>Security Deposit</h3>
+                        <p>Rs. ${this.formatCurrency(totalDeposit)}</p>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     // Utility functions
@@ -1790,8 +2511,11 @@ class RentalManager {
         this.setupModals();
         this.setupLanguageSelector();
         this.populateDateSelectors();
+        this.populateTenantSelector();
         this.updateDashboard();
         this.renderHistory();
+        this.renderTenants();
+        this.updateTenantOverview();
         this.setupSearch();
         this.setupFilters();
         this.showCurrentBikramSambatDate();
