@@ -4,6 +4,12 @@
     "description": "Track rent, WiFi, and electricity bills with Bikram Sambat calendar",
     "start_url": "/",
     "display": "standalone",
+    "display_override": [
+        "minimal-ui",
+        "browser"
+    ],
+    "prefer_related_applications": false,
+    "iarc_rating_id": "",
     "background_color": "#667eea",
     "theme_color": "#667eea",
     "orientation": "portrait",
