@@ -37,24 +37,47 @@
         <div class="nav-container">
             <h1 class="nav-title">
                 <i class="fas fa-home"></i>
-                Rental Manager
+                <span data-translate="app-title">Rental Manager</span>
             </h1>
             <div class="nav-menu">
+                <!-- Language Selector -->
+                <div class="language-selector">
+                    <button class="language-btn" id="language-btn">
+                        <i class="fas fa-language"></i>
+                        <span id="current-language">EN</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="language-dropdown" id="language-dropdown">
+                        <button class="language-option" data-lang="en">
+                            <span class="flag">🇺🇸</span>
+                            English
+                        </button>
+                        <button class="language-option" data-lang="ne">
+                            <span class="flag">🇳🇵</span>
+                            नेपाली
+                        </button>
+                        <button class="language-option" data-lang="mai">
+                            <span class="flag">🇳🇵</span>
+                            मैथिली
+                        </button>
+                    </div>
+                </div>
+                
                 <button class="nav-btn active" data-page="dashboard">
                     <i class="fas fa-tachometer-alt"></i>
-                    Dashboard
+                    <span data-translate="nav-dashboard">Dashboard</span>
                 </button>
                 <button class="nav-btn" data-page="add-entry">
                     <i class="fas fa-plus"></i>
-                    Add Entry
+                    <span data-translate="nav-add-entry">Add Entry</span>
                 </button>
                 <button class="nav-btn" data-page="history">
                     <i class="fas fa-history"></i>
-                    History
+                    <span data-translate="nav-history">History</span>
                 </button>
                 <button class="nav-btn" data-page="settings">
                     <i class="fas fa-cog"></i>
-                    Settings
+                    <span data-translate="nav-settings">Settings</span>
                 </button>
             </div>
         </div>
@@ -76,7 +99,10 @@
                 <div class="current-month-info">
                     <div class="month-display">
                         <i class="fas fa-calendar"></i>
-                        <span id="current-month-bs"></span>
+                        <div class="date-info">
+                            <span id="current-date-bs" class="current-date"></span>
+                            <span id="current-month-bs" class="current-month"></span>
+                        </div>
                     </div>
                 </div>
 
@@ -497,5 +523,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bikram-sambat-js@1.0.0/dist/index.min.js"></script>
     <script src="app.js"></script>
 </body>
-
 </html>
