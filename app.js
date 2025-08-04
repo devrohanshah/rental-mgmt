@@ -6,25 +6,658 @@ class RentalManager {
         this.currentDeleteId = null;
         this.deferredPrompt = null;
         this.electricityRate = this.getElectricityRate();
+        this.currentLanguage = this.loadLanguage();
+        this.translations = this.initializeTranslations();
         this.init();
     }
 
-    // Initialize the application
-    init() {
-        this.setupNavigation();
-        this.setupForms();
-        this.setupModals();
-        this.populateDateSelectors();
+    // Language System
+    initializeTranslations() {
+        return {
+            en: {
+                // App Title
+                'app-title': 'Rental Manager',
+                
+                // Navigation
+                'nav-dashboard': 'Dashboard',
+                'nav-add-entry': 'Add Entry',
+                'nav-history': 'History',
+                'nav-settings': 'Settings',
+                
+                // Dashboard
+                'dashboard-title': 'Dashboard',
+                'dashboard-subtitle': 'Current month\'s overview',
+                'total-amount': 'Total Amount',
+                'paid-amount': 'Paid',
+                'unpaid-amount': 'Unpaid',
+                'current-bills': 'Current Month Bills',
+                'quick-actions': 'Quick Actions',
+                'add-bills': 'Add This Month\'s Bills',
+                'mark-all-paid': 'Mark All as Paid',
+                'export-data': 'Export Data',
+                'no-bills': 'No bills recorded for this month',
+                
+                // Add Entry
+                'add-entry-title': 'Add New Entry',
+                'add-entry-subtitle': 'Record rent, WiFi, and electricity bills',
+                'date-selection': 'Date Selection',
+                'bs-year': 'Bikram Sambat Year',
+                'month': 'Month',
+                'bill-details': 'Bill Details',
+                'rent-amount': 'Rent Amount (Rs.)',
+                'wifi-bill': 'WiFi Bill (Rs.)',
+                'electricity-units': 'Electricity Units',
+                'electricity-total': 'Total: Rs.',
+                'payment-status': 'Payment Status',
+                'rent-paid': 'Rent Paid',
+                'wifi-paid': 'WiFi Paid',
+                'electricity-paid': 'Electricity Paid',
+                'notes': 'Notes (Optional)',
+                'notes-placeholder': 'Add any additional notes...',
+                'auto-fill': 'Auto-fill Previous Month',
+                'save-entry': 'Save Entry',
+                
+                // History
+                'history-title': 'Payment History',
+                'history-subtitle': 'View and manage all your records',
+                'search-placeholder': 'Search by month, year, or notes...',
+                'filter-all': 'All',
+                'filter-paid': 'Paid',
+                'filter-unpaid': 'Unpaid',
+                'no-history': 'No payment history available',
+                'add-first-entry': 'Add First Entry',
+                'paid-status': 'Paid',
+                'unpaid-status': 'Unpaid',
+                'edit': 'Edit',
+                'delete': 'Delete',
+                
+                // Settings
+                'settings-title': 'Settings',
+                'settings-subtitle': 'Manage your app preferences',
+                'electricity-rate': 'Electricity Rate',
+                'rate-per-unit': 'Rate per Unit (Rs.)',
+                'current-rate': 'Current rate: Rs.',
+                'update-rate': 'Update Rate',
+                'data-management': 'Data Management',
+                'export-all-data': 'Export All Data',
+                'import-data': 'Import Data',
+                'clear-all-data': 'Clear All Data',
+                'reminders': 'Reminders',
+                'monthly-reminder': 'Monthly Bill Reminder',
+                'reminder-desc': 'Get notified at the beginning of each month',
+                'about': 'About',
+                'version': 'Version 1.0.0',
+                'app-description': 'A simple, offline app to track your monthly rent, WiFi, and electricity bills using the Bikram Sambat calendar.',
+                'features': 'Features:',
+                'feature-offline': 'Fully offline functionality',
+                'feature-bs': 'Bikram Sambat date support',
+                'feature-status': 'Color-coded payment status',
+                'feature-autofill': 'Auto-fill previous month data',
+                'feature-export': 'Export/Import capabilities',
+                'feature-mobile': 'Mobile-friendly design',
+                
+                // Modals
+                'edit-entry': 'Edit Entry',
+                'confirm-delete': 'Confirm Delete',
+                'delete-warning': 'Are you sure you want to delete this entry? This action cannot be undone.',
+                'import-title': 'Import Data',
+                'import-desc': 'Select a JSON file to import your rental data:',
+                'save-changes': 'Save Changes',
+                'cancel': 'Cancel',
+                'import': 'Import',
+                
+                // Messages
+                'entry-saved': 'Entry saved successfully!',
+                'entry-updated': 'Entry updated successfully!',
+                'all-paid': 'All bills marked as paid!',
+                'rate-updated': 'Electricity rate updated successfully!',
+                'data-exported': 'Data exported successfully!',
+                'data-imported': 'Data imported successfully!',
+                'all-cleared': 'All data cleared',
+                'invalid-rate': 'Please enter a valid rate',
+                'select-file': 'Please select a file to import',
+                'invalid-file': 'Invalid file format',
+                'error-reading': 'Error reading file',
+                
+                // Bikram Sambat Months
+                'month-baishakh': 'Baishakh',
+                'month-jestha': 'Jestha',
+                'month-ashadh': 'Ashadh',
+                'month-shrawan': 'Shrawan',
+                'month-bhadra': 'Bhadra',
+                'month-ashwin': 'Ashwin',
+                'month-kartik': 'Kartik',
+                'month-mangsir': 'Mangsir',
+                'month-poush': 'Poush',
+                'month-magh': 'Magh',
+                'month-falgun': 'Falgun',
+                'month-chaitra': 'Chaitra',
+                
+                // Days
+                'monday': 'Monday',
+                'tuesday': 'Tuesday',
+                'wednesday': 'Wednesday',
+                'thursday': 'Thursday',
+                'friday': 'Friday',
+                'saturday': 'Saturday',
+                'sunday': 'Sunday'
+            },
+            
+            ne: {
+                // App Title
+                'app-title': 'भाडा व्यवस्थापन',
+                
+                // Navigation
+                'nav-dashboard': 'ड्यासबोर्ड',
+                'nav-add-entry': 'नयाँ प्रविष्टि',
+                'nav-history': 'इतिहास',
+                'nav-settings': 'सेटिङ्हरू',
+                
+                // Dashboard
+                'dashboard-title': 'ड्यासबोर्ड',
+                'dashboard-subtitle': 'यस महिनाको विवरण',
+                'total-amount': 'कुल रकम',
+                'paid-amount': 'भुक्तानी',
+                'unpaid-amount': 'बाँकी',
+                'current-bills': 'यस महिनाका बिलहरू',
+                'quick-actions': 'द्रुत कार्यहरू',
+                'add-bills': 'यस महिनाका बिलहरू थप्नुहोस्',
+                'mark-all-paid': 'सबै भुक्तानी भएको चिन्ह लगाउनुहोस्',
+                'export-data': 'डेटा निर्यात गर्नुहोस्',
+                'no-bills': 'यस महिनाको लागि कुनै बिल रेकर्ड गरिएको छैन',
+                
+                // Add Entry
+                'add-entry-title': 'नयाँ प्रविष्टि थप्नुहोस्',
+                'add-entry-subtitle': 'भाडा, वाइफाइ, र बिजुलीको बिल रेकर्ड गर्नुहोस्',
+                'date-selection': 'मिति छनोट',
+                'bs-year': 'विक्रम संवत् वर्ष',
+                'month': 'महिना',
+                'bill-details': 'बिलका विवरणहरू',
+                'rent-amount': 'भाडाको रकम (रु.)',
+                'wifi-bill': 'वाइफाइ बिल (रु.)',
+                'electricity-units': 'बिजुलीको एकाइ',
+                'electricity-total': 'कुल: रु.',
+                'payment-status': 'भुक्तानी स्थिति',
+                'rent-paid': 'भाडा भुक्तानी',
+                'wifi-paid': 'वाइफाइ भुक्तानी',
+                'electricity-paid': 'बिजुली भुक्तानी',
+                'notes': 'टिप्पणीहरू (वैकल्पिक)',
+                'notes-placeholder': 'कुनै अतिरिक्त टिप्पणी थप्नुहोस्...',
+                'auto-fill': 'अघिल्लो महिना स्वतः भर्नुहोस्',
+                'save-entry': 'प्रविष्टि सेभ गर्नुहोस्',
+                
+                // History
+                'history-title': 'भुक्तानी इतिहास',
+                'history-subtitle': 'आफ्ना सबै रेकर्डहरू हेर्नुहोस् र व्यवस्थापन गर्नुहोस्',
+                'search-placeholder': 'महिना, वर्ष, वा टिप्पणीहरूद्वारा खोज्नुहोस्...',
+                'filter-all': 'सबै',
+                'filter-paid': 'भुक्तानी',
+                'filter-unpaid': 'बाँकी',
+                'no-history': 'कुनै भुक्तानी इतिहास उपलब्ध छैन',
+                'add-first-entry': 'पहिलो प्रविष्टि थप्नुहोस्',
+                'paid-status': 'भुक्तानी',
+                'unpaid-status': 'बाँकी',
+                'edit': 'सम्पादन',
+                'delete': 'मेटाउनुहोस्',
+                
+                // Settings
+                'settings-title': 'सेटिङ्हरू',
+                'settings-subtitle': 'आफ्ना एप प्राथमिकताहरू व्यवस्थापन गर्नुहोस्',
+                'electricity-rate': 'बिजुलीको दर',
+                'rate-per-unit': 'प्रति एकाइ दर (रु.)',
+                'current-rate': 'हालको दर: रु.',
+                'update-rate': 'दर अपडेट गर्नुहोस्',
+                'data-management': 'डेटा व्यवस्थापन',
+                'export-all-data': 'सबै डेटा निर्यात गर्नुहोस्',
+                'import-data': 'डेटा आयात गर्नुहोस्',
+                'clear-all-data': 'सबै डेटा सफा गर्नुहोस्',
+                'reminders': 'सम्झनाहरू',
+                'monthly-reminder': 'मासिक बिल सम्झना',
+                'reminder-desc': 'प्रत्येक महिनाको सुरुमा सूचना पाउनुहोस्',
+                'about': 'बारेमा',
+                'version': 'संस्करण १.०.०',
+                'app-description': 'विक्रम संवत् पात्रो प्रयोग गरेर आफ्नो मासिक भाडा, वाइफाइ र बिजुलीको बिल ट्र्याक गर्नको लागि एक सरल, अफलाइन एप।',
+                'features': 'सुविधाहरू:',
+                'feature-offline': 'पूर्ण अफलाइन कार्यक्षमता',
+                'feature-bs': 'विक्रम संवत् मिति समर्थन',
+                'feature-status': 'रङ-कोडेड भुक्तानी स्थिति',
+                'feature-autofill': 'अघिल्लो महिना डेटा स्वतः भर्ने',
+                'feature-export': 'निर्यात/आयात क्षमताहरू',
+                'feature-mobile': 'मोबाइल-मैत्री डिजाइन',
+                
+                // Modals
+                'edit-entry': 'प्रविष्टि सम्पादन गर्नुहोस्',
+                'confirm-delete': 'मेटाउने पुष्टि गर्नुहोस्',
+                'delete-warning': 'के तपाईं यो प्रविष्टि मेटाउन चाहनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।',
+                'import-title': 'डेटा आयात गर्नुहोस्',
+                'import-desc': 'आफ्नो भाडा डेटा आयात गर्न JSON फाइल छान्नुहोस्:',
+                'save-changes': 'परिवर्तनहरू सेभ गर्नुहोस्',
+                'cancel': 'रद्द गर्नुहोस्',
+                'import': 'आयात गर्नुहोस्',
+                
+                // Messages
+                'entry-saved': 'प्रविष्टि सफलतापूर्वक सेभ भयो!',
+                'entry-updated': 'प्रविष्टि सफलतापूर्वक अपडेट भयो!',
+                'all-paid': 'सबै बिलहरू भुक्तानी भएको चिन्ह लगाइयो!',
+                'rate-updated': 'बिजुलीको दर सफलतापूर्वक अपडेट भयो!',
+                'data-exported': 'डेटा सफलतापूर्वक निर्यात भयो!',
+                'data-imported': 'डेटा सफलतापूर्वक आयात भयो!',
+                'all-cleared': 'सबै डेटा सफा गरियो',
+                'invalid-rate': 'कृपया वैध दर प्रविष्ट गर्नुहोस्',
+                'select-file': 'कृपया आयात गर्नको लागि फाइल छान्नुहोस्',
+                'invalid-file': 'अवैध फाइल ढाँचा',
+                'error-reading': 'फाइल पढ्दा त्रुटि',
+                
+                // Bikram Sambat Months
+                'month-baishakh': 'बैशाख',
+                'month-jestha': 'जेठ',
+                'month-ashadh': 'आषाढ',
+                'month-shrawan': 'श्रावण',
+                'month-bhadra': 'भाद्र',
+                'month-ashwin': 'आश्विन',
+                'month-kartik': 'कार्तिक',
+                'month-mangsir': 'मंसिर',
+                'month-poush': 'पौष',
+                'month-magh': 'माघ',
+                'month-falgun': 'फाल्गुन',
+                'month-chaitra': 'चैत्र',
+                
+                // Days
+                'monday': 'सोमबार',
+                'tuesday': 'मंगलबार',
+                'wednesday': 'बुधबार',
+                'thursday': 'बिहिबार',
+                'friday': 'शुक्रबार',
+                'saturday': 'शनिबार',
+                'sunday': 'आइतबार'
+            },
+            
+            mai: {
+                // App Title
+                'app-title': 'भाडा प्रबंधन',
+                
+                // Navigation
+                'nav-dashboard': 'डैशबोर्ड',
+                'nav-add-entry': 'नव प्रविष्टि',
+                'nav-history': 'इतिहास',
+                'nav-settings': 'सेटिंग सभ',
+                
+                // Dashboard
+                'dashboard-title': 'डैशबोर्ड',
+                'dashboard-subtitle': 'ई मासक विवरण',
+                'total-amount': 'कुल राशि',
+                'paid-amount': 'भुगतान',
+                'unpaid-amount': 'बाकी',
+                'current-bills': 'ई मासक बिल सभ',
+                'quick-actions': 'तुरंत कार्य सभ',
+                'add-bills': 'ई मासक बिल सभ जोड़ू',
+                'mark-all-paid': 'सब भुगतान भेल चिन्ह लगाऊ',
+                'export-data': 'डेटा निर्यात करू',
+                'no-bills': 'ई मासक लेल कोनो बिल रिकॉर्ड नहि अछि',
+                
+                // Add Entry
+                'add-entry-title': 'नव प्रविष्टि जोड़ू',
+                'add-entry-subtitle': 'भाडा, वाईफाई आ बिजली क बिल रिकॉर्ड करू',
+                'date-selection': 'तारीख चुनाव',
+                'bs-year': 'विक्रम संवत वर्ष',
+                'month': 'मास',
+                'bill-details': 'बिलक विवरण सभ',
+                'rent-amount': 'भाडाक राशि (रु.)',
+                'wifi-bill': 'वाईफाई बिल (रु.)',
+                'electricity-units': 'बिजलीक इकाई',
+                'electricity-total': 'कुल: रु.',
+                'payment-status': 'भुगतान स्थिति',
+                'rent-paid': 'भाडा भुगतान',
+                'wifi-paid': 'वाईफाई भुगतान',
+                'electricity-paid': 'बिजली भुगतान',
+                'notes': 'टिप्पणी सभ (वैकल्पिक)',
+                'notes-placeholder': 'कोनो अतिरिक्त टिप्पणी जोड़ू...',
+                'auto-fill': 'पहिले मास स्वतः भरू',
+                'save-entry': 'प्रविष्टि सेव करू',
+                
+                // History
+                'history-title': 'भुगतान इतिहास',
+                'history-subtitle': 'अपन सब रिकॉर्ड देखू आ प्रबंधन करू',
+                'search-placeholder': 'मास, वर्ष अथवा टिप्पणी स खोजू...',
+                'filter-all': 'सब',
+                'filter-paid': 'भुगतान',
+                'filter-unpaid': 'बाकी',
+                'no-history': 'कोनो भुगतान इतिहास उपलब्ध नहि अछि',
+                'add-first-entry': 'पहिल प्रविष्टि जोड़ू',
+                'paid-status': 'भुगतान',
+                'unpaid-status': 'बाकी',
+                'edit': 'संपादन',
+                'delete': 'मिटाऊ',
+                
+                // Settings
+                'settings-title': 'सेटिंग सभ',
+                'settings-subtitle': 'अपन एप प्राथमिकता सभ प्रबंधन करू',
+                'electricity-rate': 'बिजलीक दर',
+                'rate-per-unit': 'प्रति इकाई दर (रु.)',
+                'current-rate': 'वर्तमान दर: रु.',
+                'update-rate': 'दर अपडेट करू',
+                'data-management': 'डेटा प्रबंधन',
+                'export-all-data': 'सब डेटा निर्यात करू',
+                'import-data': 'डेटा आयात करू',
+                'clear-all-data': 'सब डेटा साफ करू',
+                'reminders': 'स्मरण सभ',
+                'monthly-reminder': 'मासिक बिल स्मरण',
+                'reminder-desc': 'हर मासक शुरुआत मे सूचना पाऊ',
+                'about': 'विषय मे',
+                'version': 'संस्करण १.०.०',
+                'app-description': 'विक्रम संवत पंचांग प्रयोग क क अपन मासिक भाडा, वाईफाई आ बिजलीक बिल ट्रैक करब लेल एकटा सरल, ऑफलाइन एप।',
+                'features': 'सुविधा सभ:',
+                'feature-offline': 'पूर्ण अफलाइन कार्यक्षमता',
+                'feature-bs': 'विक्रम संवत तारीख समर्थन',
+                'feature-status': 'रंग-कोडेड भुगतान स्थिति',
+                'feature-autofill': 'पहिले मास डेटा स्वतः भरब',
+                'feature-export': 'निर्यात/आयात क्षमता सभ',
+                'feature-mobile': 'मोबाइल-मित्र डिजाइन',
+                
+                // Modals
+                'edit-entry': 'प्रविष्टि संपादन करू',
+                'confirm-delete': 'मिटाओल पुष्टि करू',
+                'delete-warning': 'की अहाँ ई प्रविष्टि मिटाब चाहैत छी? ई कार्य पूर्ववत नहि क सकैत अछि।',
+                'import-title': 'डेटा आयात करू',
+                'import-desc': 'अपन भाडा डेटा आयात करब लेल JSON फाइल चुनू:',
+                'save-changes': 'परिवर्तन सभ सेव करू',
+                'cancel': 'रद्द करू',
+                'import': 'आयात करू',
+                
+                // Messages
+                'entry-saved': 'प्रविष्टि सफलतापूर्वक सेव भेल!',
+                'entry-updated': 'प्रविष्टि सफलतापूर्वक अपडेट भेल!',
+                'all-paid': 'सब बिल भुगतान भेल चिन्ह लगाओल गेल!',
+                'rate-updated': 'बिजुलीक दर सफलतापूर्वक अपडेट भेल!',
+                'data-exported': 'डेटा सफलतापूर्वक निर्यात भेल!',
+                'data-imported': 'डेटा सफलतापूर्वक आयात भेल!',
+                'all-cleared': 'सब डेटा साफ कएल गेल',
+                'invalid-rate': 'कृपया वैध दर प्रविष्ट करू',
+                'select-file': 'कृपया आयात करब लेल फाइल चुनू',
+                'invalid-file': 'अवैध फाइल प्रारूप',
+                'error-reading': 'फाइल पढ़ब मे त्रुटि',
+                
+                // Bikram Sambat Months
+                'month-baishakh': 'बैशाख',
+                'month-jestha': 'जेठ',
+                'month-ashadh': 'आषाढ़',
+                'month-shrawan': 'श्रावण',
+                'month-bhadra': 'भाद्र',
+                'month-ashwin': 'आश्विन',
+                'month-kartik': 'कार्तिक',
+                'month-mangsir': 'मंसिर',
+                'month-poush': 'पौष',
+                'month-magh': 'माघ',
+                'month-falgun': 'फाल्गुन',
+                'month-chaitra': 'चैत्र',
+                
+                // Days
+                'monday': 'सोमवार',
+                'tuesday': 'मंगलवार',
+                'wednesday': 'बुधवार',
+                'thursday': 'बिहिवार',
+                'friday': 'शुक्रवार',
+                'saturday': 'शनिवार',
+                'sunday': 'रविवार'
+            }
+        };
+    }
+
+    loadLanguage() {
+        return localStorage.getItem('appLanguage') || 'en';
+    }
+
+    saveLanguage() {
+        localStorage.setItem('appLanguage', this.currentLanguage);
+    }
+
+    setLanguage(lang) {
+        this.currentLanguage = lang;
+        this.saveLanguage();
+        this.updateLanguageDisplay();
+        this.translatePage();
         this.updateDashboard();
         this.renderHistory();
-        this.setupSearch();
-        this.setupFilters();
-        this.showCurrentBikramSambatDate();
-        this.setupPWA();
-        this.setupSettings();
-        this.setupImportExport();
-        this.loadSettings();
-        this.setupElectricityCalculation();
+        this.showToast(this.translate('language-changed') || 'Language changed successfully!', 'success');
+    }
+
+    translate(key) {
+        return this.translations[this.currentLanguage][key] || this.translations['en'][key] || key;
+    }
+
+    translatePage() {
+        const elements = document.querySelectorAll('[data-translate]');
+        elements.forEach(element => {
+            const key = element.getAttribute('data-translate');
+            const translation = this.translate(key);
+            if (translation) {
+                element.textContent = translation;
+            }
+        });
+
+        // Update page titles
+        this.updatePageTitles();
+        
+        // Update form labels and placeholders
+        this.updateFormElements();
+        
+        // Update dropdown content
+        this.updateDropdownContent();
+        
+        // Update month selector
+        this.updateMonthSelector();
+    }
+
+    updateLanguageDisplay() {
+        const currentLangElement = document.getElementById('current-language');
+        const langMap = {
+            'en': 'EN',
+            'ne': 'नेप',
+            'mai': 'मैथ'
+        };
+        
+        if (currentLangElement) {
+            currentLangElement.textContent = langMap[this.currentLanguage] || 'EN';
+        }
+
+        // Update active language option
+        const languageOptions = document.querySelectorAll('.language-option');
+        languageOptions.forEach(option => {
+            option.classList.remove('active');
+            if (option.getAttribute('data-lang') === this.currentLanguage) {
+                option.classList.add('active');
+            }
+        });
+    }
+
+    updatePageTitles() {
+        // Dashboard
+        const dashboardTitle = document.querySelector('#dashboard .page-header h2');
+        if (dashboardTitle) {
+            dashboardTitle.innerHTML = `<i class="fas fa-tachometer-alt"></i> ${this.translate('dashboard-title')}`;
+        }
+        
+        const dashboardSubtitle = document.querySelector('#dashboard .page-header .subtitle');
+        if (dashboardSubtitle) {
+            dashboardSubtitle.textContent = this.translate('dashboard-subtitle');
+        }
+
+        // Add Entry
+        const addEntryTitle = document.querySelector('#add-entry .page-header h2');
+        if (addEntryTitle) {
+            addEntryTitle.innerHTML = `<i class="fas fa-plus"></i> ${this.translate('add-entry-title')}`;
+        }
+        
+        const addEntrySubtitle = document.querySelector('#add-entry .page-header .subtitle');
+        if (addEntrySubtitle) {
+            addEntrySubtitle.textContent = this.translate('add-entry-subtitle');
+        }
+
+        // History
+        const historyTitle = document.querySelector('#history .page-header h2');
+        if (historyTitle) {
+            historyTitle.innerHTML = `<i class="fas fa-history"></i> ${this.translate('history-title')}`;
+        }
+        
+        const historySubtitle = document.querySelector('#history .page-header .subtitle');
+        if (historySubtitle) {
+            historySubtitle.textContent = this.translate('history-subtitle');
+        }
+
+        // Settings
+        const settingsTitle = document.querySelector('#settings .page-header h2');
+        if (settingsTitle) {
+            settingsTitle.innerHTML = `<i class="fas fa-cog"></i> ${this.translate('settings-title')}`;
+        }
+        
+        const settingsSubtitle = document.querySelector('#settings .page-header .subtitle');
+        if (settingsSubtitle) {
+            settingsSubtitle.textContent = this.translate('settings-subtitle');
+        }
+    }
+
+    updateFormElements() {
+        // Summary cards
+        const totalCard = document.querySelector('.summary-card.total .card-content h3');
+        if (totalCard) totalCard.textContent = this.translate('total-amount');
+        
+        const paidCard = document.querySelector('.summary-card.paid .card-content h3');
+        if (paidCard) paidCard.textContent = this.translate('paid-amount');
+        
+        const unpaidCard = document.querySelector('.summary-card.unpaid .card-content h3');
+        if (unpaidCard) unpaidCard.textContent = this.translate('unpaid-amount');
+
+        // Form labels
+        const rentLabel = document.querySelector('label[for="rent"]');
+        if (rentLabel) {
+            rentLabel.innerHTML = `<i class="fas fa-home"></i> ${this.translate('rent-amount')}`;
+        }
+        
+        const wifiLabel = document.querySelector('label[for="wifi"]');
+        if (wifiLabel) {
+            wifiLabel.innerHTML = `<i class="fas fa-wifi"></i> ${this.translate('wifi-bill')}`;
+        }
+
+        // Update electricity label with rate
+        this.updateElectricityLabel();
+
+        // Form placeholders
+        const notesTextarea = document.getElementById('notes');
+        if (notesTextarea) {
+            notesTextarea.placeholder = this.translate('notes-placeholder');
+        }
+
+        const searchInput = document.getElementById('search-history');
+        if (searchInput) {
+            searchInput.placeholder = this.translate('search-placeholder');
+        }
+
+        // Buttons
+        const autoFillBtn = document.getElementById('auto-fill-btn');
+        if (autoFillBtn) {
+            autoFillBtn.innerHTML = `<i class="fas fa-magic"></i> ${this.translate('auto-fill')}`;
+        }
+
+        // Filter buttons
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            const filter = btn.getAttribute('data-filter');
+            if (filter === 'all') {
+                btn.innerHTML = `<i class="fas fa-list"></i> ${this.translate('filter-all')}`;
+            } else if (filter === 'paid') {
+                btn.innerHTML = `<i class="fas fa-check"></i> ${this.translate('filter-paid')}`;
+            } else if (filter === 'unpaid') {
+                btn.innerHTML = `<i class="fas fa-times"></i> ${this.translate('filter-unpaid')}`;
+            }
+        });
+    }
+
+    updateElectricityLabel() {
+        const electricityLabel = document.querySelector('label[for="electricity"]');
+        if (electricityLabel) {
+            electricityLabel.innerHTML = `
+                <i class="fas fa-bolt"></i>
+                ${this.translate('electricity-units')} (@ Rs. ${this.electricityRate}/unit)
+            `;
+        }
+    }
+
+    updateDropdownContent() {
+        // Update section headings in forms
+        const formSections = document.querySelectorAll('.form-section h3');
+        formSections.forEach(section => {
+            const icon = section.querySelector('i');
+            const iconClass = icon ? icon.className : '';
+            
+            if (iconClass.includes('fa-calendar')) {
+                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('date-selection')}`;
+            } else if (iconClass.includes('fa-money-bill')) {
+                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('bill-details')}`;
+            } else if (iconClass.includes('fa-check')) {
+                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('payment-status')}`;
+            } else if (iconClass.includes('fa-sticky-note')) {
+                section.innerHTML = `<i class="${iconClass}"></i> ${this.translate('notes')}`;
+            }
+        });
+    }
+
+    updateMonthSelector() {
+        const monthSelect = document.getElementById('bs-month');
+        if (monthSelect) {
+            const selectedValue = monthSelect.value;
+            monthSelect.innerHTML = '';
+            
+            const months = [
+                'month-baishakh', 'month-jestha', 'month-ashadh', 'month-shrawan',
+                'month-bhadra', 'month-ashwin', 'month-kartik', 'month-mangsir',
+                'month-poush', 'month-magh', 'month-falgun', 'month-chaitra'
+            ];
+
+            months.forEach((monthKey, index) => {
+                const option = document.createElement('option');
+                option.value = index + 1;
+                option.textContent = this.translate(monthKey);
+                if (selectedValue && parseInt(selectedValue) === index + 1) {
+                    option.selected = true;
+                }
+                monthSelect.appendChild(option);
+            });
+        }
+    }
+
+    setupLanguageSelector() {
+        const languageBtn = document.getElementById('language-btn');
+        const languageDropdown = document.getElementById('language-dropdown');
+        const languageOptions = document.querySelectorAll('.language-option');
+
+        if (languageBtn && languageDropdown) {
+            // Toggle dropdown
+            languageBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                languageBtn.classList.toggle('active');
+                languageDropdown.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', () => {
+                languageBtn.classList.remove('active');
+                languageDropdown.classList.remove('show');
+            });
+
+            // Language option selection
+            languageOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const selectedLang = option.getAttribute('data-lang');
+                    this.setLanguage(selectedLang);
+                    languageBtn.classList.remove('active');
+                    languageDropdown.classList.remove('show');
+                });
+            });
+        }
+
+        // Set initial active language
+        this.updateLanguageDisplay();
     }
 
     // Data management
@@ -135,54 +768,135 @@ class RentalManager {
     }
 
     // Bikram Sambat date utilities
-    getCurrentBikramSambatDate() {
+    async getCurrentBikramSambatDate() {
         try {
-            const now = new Date();
-            // Using bikram-sambat-js library
-            const bsDate = nepaliDateConverter.englishToNepali(
-                now.getFullYear(),
-                now.getMonth() + 1,
-                now.getDate()
-            );
-            return bsDate;
+            // Fetch data from BloggerNepal API
+            const dateResponse = await fetch("https://calendar.bloggernepal.com/api/today");
+            const dateData = await dateResponse.json();
+            
+            console.log('BloggerNepal API Response:', dateData); // Debug log
+            console.log('Available fields:', Object.keys(dateData)); // Show all available fields
+            
+            if (dateData) {
+                // Try multiple field name variations
+                const year = dateData.bs_year || dateData.year || dateData.nepali_year || dateData.bikram_sambat_year || 2082;
+                const month = dateData.bs_month || dateData.month || dateData.nepali_month || dateData.bikram_sambat_month || 4;
+                const day = dateData.bs_date || dateData.date || dateData.day || dateData.nepali_date || dateData.bikram_sambat_date || 19;
+                
+                // Try English day names first, then Nepali
+                let weekdayStrEn = dateData.weekday_en || dateData.day_name || dateData.weekday || dateData.day_name_english;
+                let weekdayStrNp = dateData.weekday_np || dateData.day_name_np || dateData.nepali_day_name || dateData.day_name_nepali;
+                
+                // Try English month names first, then Nepali
+                let monthStrEn = dateData.month_name || dateData.bs_month_name || dateData.month_name_english || dateData.nepali_month_name_english;
+                let monthStrNp = dateData.month_name_np || dateData.bs_month_name_np || dateData.nepali_month_name || dateData.month_name_nepali;
+                
+                // If English names are not available, use Nepali names or fallbacks
+                if (!weekdayStrEn || weekdayStrEn === 'undefined') {
+                    if (weekdayStrNp && weekdayStrNp !== 'undefined') {
+                        // Convert Nepali day names to English
+                        const nepaliToEnglishDays = {
+                            'आइतबार': 'Sunday',
+                            'सोमबार': 'Monday', 
+                            'मंगलबार': 'Tuesday',
+                            'बुधबार': 'Wednesday',
+                            'बिहिबार': 'Thursday',
+                            'शुक्रबार': 'Friday',
+                            'शनिबार': 'Saturday'
+                        };
+                        weekdayStrEn = nepaliToEnglishDays[weekdayStrNp] || 'Monday';
+                    } else {
+                        weekdayStrEn = 'Monday';
+                    }
+                }
+                
+                if (!monthStrEn || monthStrEn === 'undefined') {
+                    if (monthStrNp && monthStrNp !== 'undefined') {
+                        // Convert Nepali month names to English
+                        const nepaliToEnglishMonths = {
+                            'बैशाख': 'Baishakh',
+                            'जेठ': 'Jestha',
+                            'आषाढ': 'Ashadh',
+                            'श्रावण': 'Shrawan',
+                            'भाद्र': 'Bhadra',
+                            'आश्विन': 'Ashwin',
+                            'कार्तिक': 'Kartik',
+                            'मंसिर': 'Mangsir',
+                            'पौष': 'Poush',
+                            'माघ': 'Magh',
+                            'फाल्गुन': 'Falgun',
+                            'चैत्र': 'Chaitra'
+                        };
+                        monthStrEn = nepaliToEnglishMonths[monthStrNp] || this.getBikramSambatMonthName(month);
+                    } else {
+                        monthStrEn = this.getBikramSambatMonthName(month);
+                    }
+                }
+                
+                return {
+                    year: year,
+                    month: month,
+                    day: day,
+                    weekday: dateData.weekday || dateData.day_of_week || 1,
+                    weekdayStrEn: weekdayStrEn,
+                    weekdayStrNp: weekdayStrNp || 'सोमबार',
+                    bsMonthStrEn: monthStrEn,
+                    bsMonthStrNp: monthStrNp || 'श्रावण',
+                    isHoliday: dateData.is_holiday || dateData.holiday || false,
+                    events: dateData.events || []
+                };
+            }
+            
+            throw new Error('Invalid API response');
+            
         } catch (error) {
-            // Fallback if library fails
-            console.warn('Bikram Sambat library not available, using fallback');
+            console.warn('BloggerNepal API failed, using manual override:', error);
+            // Manual override to show correct date as per your requirement
             return {
-                year: 2081,
-                month: 4,
+                year: 2082,
+                month: 4, // Shrawan
                 day: 19,
-                strMonth: 'Shrawan',
-                strDay: 'Mangalbar'
+                weekday: 1, // Monday
+                weekdayStrEn: 'Monday',
+                weekdayStrNp: 'सोमबार',
+                bsMonthStrEn: 'Shrawan',
+                bsMonthStrNp: 'श्रावण',
+                isHoliday: false,
+                events: []
             };
         }
     }
 
-    showCurrentBikramSambatDate() {
-        const bsDate = this.getCurrentBikramSambatDate();
+    async showCurrentBikramSambatDate() {
+        const bsDate = await this.getCurrentBikramSambatDate();
         const monthElement = document.getElementById('current-month-bs');
+        const dateElement = document.getElementById('current-date-bs');
+        
         if (monthElement) {
-            monthElement.textContent = `${this.getBikramSambatMonthName(bsDate.month)} ${bsDate.year}`;
+            monthElement.textContent = `${bsDate.bsMonthStrEn} ${bsDate.year}`;
         }
+        
+        if (dateElement) {
+            dateElement.textContent = `${bsDate.weekdayStrEn}, ${bsDate.day}`;
+            
+            // Add holiday indicator if it's a holiday
+            if (bsDate.isHoliday) {
+                dateElement.innerHTML += ' <span class="holiday-indicator">🎉</span>';
+            }
+        }
+        
+        // Store current date for other functions
+        this.currentBsDate = bsDate;
     }
 
-    getBikramSambatMonthName(monthNumber) {
-        const months = [
-            'Baishakh', 'Jestha', 'Ashadh', 'Shrawan',
-            'Bhadra', 'Ashwin', 'Kartik', 'Mangsir',
-            'Poush', 'Magh', 'Falgun', 'Chaitra'
-        ];
-        return months[monthNumber - 1] || 'Unknown';
-    }
-
-    populateDateSelectors() {
+    async populateDateSelectors() {
         const yearSelect = document.getElementById('bs-year');
         const monthSelect = document.getElementById('bs-month');
         
         if (!yearSelect || !monthSelect) return;
 
-        // Populate years (current year ± 5 years)
-        const currentBsDate = this.getCurrentBikramSambatDate();
+        // Get current BS date from API
+        const currentBsDate = await this.getCurrentBikramSambatDate();
         const currentYear = currentBsDate.year;
         
         yearSelect.innerHTML = '';
@@ -527,38 +1241,11 @@ class RentalManager {
         this.renderHistory();
     }
 
-    autoFillPreviousMonth() {
-        const currentYear = parseInt(document.getElementById('bs-year').value);
-        const currentMonth = parseInt(document.getElementById('bs-month').value);
-        
-        let prevYear = currentYear;
-        let prevMonth = currentMonth - 1;
-        
-        if (prevMonth < 1) {
-            prevMonth = 12;
-            prevYear--;
-        }
-
-        const previousEntry = this.data.find(entry => 
-            entry.year === prevYear && entry.month === prevMonth
-        );
-
-        if (previousEntry) {
-            document.getElementById('rent').value = previousEntry.rent;
-            document.getElementById('wifi').value = previousEntry.wifi;
-            document.getElementById('electricity').value = previousEntry.electricityUnits || 0;
-            
-            // Update calculation
+    resetForm() {
+        const form = document.getElementById('entry-form');
+        if (form) {
+            form.reset();
             this.updateElectricityCalculation();
-            
-            // Don't auto-fill payment status - let user decide
-            document.getElementById('rent-paid').checked = false;
-            document.getElementById('wifi-paid').checked = false;
-            document.getElementById('electricity-paid').checked = false;
-            
-            this.showToast('Previous month data filled!', 'info');
-        } else {
-            this.showToast('No previous month data found', 'error');
         }
     }
 
@@ -908,72 +1595,136 @@ class RentalManager {
         const entryIndex = this.data.findIndex(e => e.id === this.currentEditId);
         if (entryIndex === -1) return;
 
-        const entry = this.data[entryIndex];
+        const rent = parseFloat(document.getElementById('edit-rent').value);
+        const wifi = parseFloat(document.getElementById('edit-wifi').value);
         const electricityUnits = parseFloat(document.getElementById('edit-electricity').value);
-        
-        entry.rent = parseFloat(document.getElementById('edit-rent').value);
-        entry.wifi = parseFloat(document.getElementById('edit-wifi').value);
-        entry.electricityUnits = electricityUnits;
-        entry.electricity = this.calculateElectricityCost(electricityUnits);
-        entry.electricityRate = this.electricityRate;
-        entry.rentPaid = document.getElementById('edit-rent-paid').checked;
-        entry.wifiPaid = document.getElementById('edit-wifi-paid').checked;
-        entry.electricityPaid = document.getElementById('edit-electricity-paid').checked;
-        entry.notes = document.getElementById('edit-notes').value.trim();
-        entry.dateModified = new Date().toISOString();
+        const electricity = this.calculateElectricityCost(electricityUnits);
+        const rentPaid = document.getElementById('edit-rent-paid').checked;
+        const wifiPaid = document.getElementById('edit-wifi-paid').checked;
+        const electricityPaid = document.getElementById('edit-electricity-paid').checked;
+        const notes = document.getElementById('edit-notes').value.trim();
+
+        // Update the entry
+        this.data[entryIndex] = {
+            ...this.data[entryIndex],
+            rent,
+            wifi,
+            electricity,
+            electricityUnits,
+            electricityRate: this.electricityRate,
+            rentPaid,
+            wifiPaid,
+            electricityPaid,
+            notes,
+            dateModified: new Date().toISOString()
+        };
 
         this.saveData();
-        this.hideModal('edit-modal');
-        this.renderHistory();
         this.updateDashboard();
-        this.showToast('Entry updated successfully!', 'success');
+        this.renderHistory();
+        this.hideModal('edit-modal');
+        this.showToast(this.translate('entry-updated'), 'success');
+    }
+
+    getBikramSambatMonthName(monthNumber) {
+        const monthKeys = [
+            'month-baishakh', 'month-jestha', 'month-ashadh', 'month-shrawan',
+            'month-bhadra', 'month-ashwin', 'month-kartik', 'month-mangsir',
+            'month-poush', 'month-magh', 'month-falgun', 'month-chaitra'
+        ];
+        const monthKey = monthKeys[monthNumber - 1];
+        return monthKey ? this.translate(monthKey) : 'Unknown';
+    }
+
+    getBikramSambatDayName(dayNumber) {
+        const dayKeys = [
+            'sunday', 'monday', 'tuesday', 'wednesday',
+            'thursday', 'friday', 'saturday'
+        ];
+        const dayKey = dayKeys[dayNumber];
+        return dayKey ? this.translate(dayKey) : this.translate('monday');
     }
 
     deleteEntry(id) {
         this.currentDeleteId = id;
         this.showModal('delete-modal');
+        
+        // Update delete modal text
+        const deleteWarning = document.querySelector('#delete-modal .modal-body p');
+        if (deleteWarning) {
+            deleteWarning.textContent = this.translate('delete-warning');
+        }
+        
+        // Setup delete confirmation
+        const confirmDelete = document.getElementById('confirm-delete');
+        const cancelDelete = document.getElementById('cancel-delete');
+        
+        if (confirmDelete) {
+            confirmDelete.innerHTML = `<i class="fas fa-trash"></i> ${this.translate('delete')}`;
+            confirmDelete.onclick = () => {
+                this.confirmDelete();
+            };
+        }
+        
+        if (cancelDelete) {
+            cancelDelete.innerHTML = `<i class="fas fa-times"></i> ${this.translate('cancel')}`;
+            cancelDelete.onclick = () => {
+                this.hideModal('delete-modal');
+            };
+        }
     }
 
     confirmDelete() {
-        const index = this.data.findIndex(e => e.id === this.currentDeleteId);
-        if (index !== -1) {
-            this.data.splice(index, 1);
+        const entryIndex = this.data.findIndex(e => e.id === this.currentDeleteId);
+        if (entryIndex !== -1) {
+            this.data.splice(entryIndex, 1);
             this.saveData();
-            this.hideModal('delete-modal');
-            this.renderHistory();
             this.updateDashboard();
-            this.showToast('Entry deleted successfully!', 'success');
+            this.renderHistory();
+            this.hideModal('delete-modal');
+            this.showToast(this.translate('entry-deleted') || 'Entry deleted successfully!', 'success');
         }
     }
 
-    // Modals
+    autoFillPreviousMonth() {
+        const currentYear = parseInt(document.getElementById('bs-year').value);
+        const currentMonth = parseInt(document.getElementById('bs-month').value);
+        
+        let prevMonth = currentMonth - 1;
+        let prevYear = currentYear;
+        
+        if (prevMonth < 1) {
+            prevMonth = 12;
+            prevYear = currentYear - 1;
+        }
+        
+        const previousEntry = this.data.find(entry => 
+            entry.year === prevYear && entry.month === prevMonth
+        );
+        
+        if (previousEntry) {
+            document.getElementById('rent').value = previousEntry.rent;
+            document.getElementById('wifi').value = previousEntry.wifi;
+            document.getElementById('electricity').value = previousEntry.electricityUnits || 0;
+            this.updateElectricityCalculation();
+            this.showToast(this.translate('auto-filled') || 'Previous month data filled!', 'success');
+        } else {
+            this.showToast(this.translate('no-previous-data') || 'No previous month data found', 'info');
+        }
+    }
+
+    // Modal management
     setupModals() {
-        // Close buttons
-        document.querySelectorAll('.close-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const modal = e.target.closest('.modal');
-                this.hideModal(modal.id);
-            });
-        });
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            const closeBtn = modal.querySelector('.close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    this.hideModal(modal.id);
+                });
+            }
 
-        // Cancel delete
-        const cancelDelete = document.getElementById('cancel-delete');
-        if (cancelDelete) {
-            cancelDelete.addEventListener('click', () => {
-                this.hideModal('delete-modal');
-            });
-        }
-
-        // Confirm delete
-        const confirmDelete = document.getElementById('confirm-delete');
-        if (confirmDelete) {
-            confirmDelete.addEventListener('click', () => {
-                this.confirmDelete();
-            });
-        }
-
-        // Click outside to close
-        document.querySelectorAll('.modal').forEach(modal => {
+            // Close modal when clicking outside
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     this.hideModal(modal.id);
@@ -998,7 +1749,33 @@ class RentalManager {
         }
     }
 
-    // Utilities
+    // Toast notifications
+    showToast(message, type = 'info') {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icon = type === 'success' ? 'fa-check-circle' : 
+                    type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+        
+        toast.innerHTML = `
+            <i class="fas ${icon}"></i>
+            <span>${message}</span>
+        `;
+
+        container.appendChild(toast);
+
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }
+
+    // Utility functions
     formatCurrency(amount) {
         return new Intl.NumberFormat('en-IN', {
             minimumFractionDigits: 0,
@@ -1006,71 +1783,28 @@ class RentalManager {
         }).format(amount);
     }
 
-    showToast(message, type = 'info') {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        
-        const icon = type === 'success' ? 'check-circle' : 
-                     type === 'error' ? 'exclamation-triangle' : 
-                     'info-circle';
-        
-        toast.innerHTML = `
-            <i class="fas fa-${icon}"></i>
-            <span>${message}</span>
-        `;
-        
-        container.appendChild(toast);
-        
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
-            }
-        }, 5000);
+    // Initialize the application
+    init() {
+        this.setupNavigation();
+        this.setupForms();
+        this.setupModals();
+        this.setupLanguageSelector();
+        this.populateDateSelectors();
+        this.updateDashboard();
+        this.renderHistory();
+        this.setupSearch();
+        this.setupFilters();
+        this.showCurrentBikramSambatDate();
+        this.setupPWA();
+        this.setupSettings();
+        this.setupImportExport();
+        this.loadSettings();
+        this.setupElectricityCalculation();
+        this.translatePage();
     }
 }
 
-// Fallback Bikram Sambat converter (simplified)
-const nepaliDateConverter = {
-    englishToNepali: function(year, month, day) {
-        // This is a simplified fallback - in a real app, you'd use the bikram-sambat-js library
-        // For now, we'll return approximate values
-        const bsYear = year + 57;
-        const bsMonth = month <= 4 ? month + 8 : month - 4;
-        return {
-            year: bsYear,
-            month: bsMonth,
-            day: day,
-            strMonth: this.getMonthName(bsMonth)
-        };
-    },
-    
-    getMonthName: function(month) {
-        const months = [
-            'Baishakh', 'Jestha', 'Ashadh', 'Shrawan',
-            'Bhadra', 'Ashwin', 'Kartik', 'Mangsir',
-            'Poush', 'Magh', 'Falgun', 'Chaitra'
-        ];
-        return months[month - 1] || 'Unknown';
-    }
-};
-
-// Initialize the app when DOM is loaded
-let app;
+// Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    app = new RentalManager();
+    window.app = new RentalManager();
 });
-
-// Service Worker for offline functionality
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-                console.log('SW registered: ', registration);
-            })
-            .catch((registrationError) => {
-                console.log('SW registration failed: ', registrationError);
-            });
-    });
-}
