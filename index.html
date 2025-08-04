@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental Management App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Rental Manager">
+</head>
+<body>
+    <!-- PWA Install Banner -->
+    <div id="install-banner" class="install-banner" style="display: none;">
+        <div class="install-content">
+            <i class="fas fa-download"></i>
+            <div>
+                <h4>Install Rental Manager</h4>
+                <p>Add to your home screen for easy access</p>
+            </div>
+            <button id="install-btn" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Install
+            </button>
+            <button id="dismiss-install" class="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">
+                <i class="fas fa-home"></i>
+                Rental Manager
+            </h1>
+            <div class="nav-menu">
+                <button class="nav-btn active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </button>
+                <button class="nav-btn" data-page="add-entry">
+                    <i class="fas fa-plus"></i>
+                    Add Entry
+                </button>
+                <button class="nav-btn" data-page="history">
+                    <i class="fas fa-history"></i>
+                    History
+                </button>
+                <button class="nav-btn" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Page -->
+        <section id="dashboard" class="page active">
+            <div class="container">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
+                    </h2>
+                    <p class="subtitle">Current month's overview</p>
+                </div>
+
+                <div class="current-month-info">
+                    <div class="month-display">
+                        <i class="fas fa-calendar"></i>
+                        <span id="current-month-bs"></span>
+                    </div>
+                </div>
+
+                <div class="summary-cards">
+                    <div class="summary-card total">
+                        <div class="card-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Amount</h3>
+                            <p id="total-amount">Rs. 0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card paid">
+                        <div class="card-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Paid</h3>
+                            <p id="paid-amount">Rs. 0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card unpaid">
+                        <div class="card-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Unpaid</h3>
+                            <p id="unpaid-amount">Rs. 0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="current-bills">
+                    <h3>
+                        <i class="fas fa-list"></i>
+                        Current Month Bills
+                    </h3>
+                    <div id="current-bills-list">
+                        <!-- Bills will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3>
+                        <i class="fas fa-bolt"></i>
+                        Quick Actions
+                    </h3>
+                    <div class="action-buttons">
+                        <button class="action-card" onclick="app.showPage('add-entry')">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Add This Month's Bills</span>
+                        </button>
+                        <button class="action-card" onclick="app.markAllPaid()">
+                            <i class="fas fa-check-double"></i>
+                            <span>Mark All as Paid</span>
+                        </button>
+                        <button class="action-card" onclick="app.exportData()">
+                            <i class="fas fa-download"></i>
+                            <span>Export Data</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Entry Page -->
+        <section id="add-entry" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-plus"></i>
+                        Add New Entry
+                    </h2>
+                    <p class="subtitle">Record rent, WiFi, and electricity bills</p>
+                </div>
+
+                <form id="entry-form" class="entry-form">
+                    <div class="form-section">
+                        <h3>
+                            <i class="fas fa-calendar"></i>
+                            Date Selection
+                        </h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bs-year">
+                                    <i class="fas fa-calendar-year"></i>
+                                    Bikram Sambat Year
+                                </label>
+                                <select id="bs-year" required>
+                                    <!-- Years will be populated by JS -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="bs-month">
+                                    <i class="fas fa-calendar-month"></i>
+                                    Month
+                                </label>
+                                <select id="bs-month" required>
+                                    <!-- Months will be populated by JS -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>
+                            <i class="fas fa-money-bill"></i>
+                            Bill Details
+                        </h3>
+                        <div class="form-group">
+                            <label for="rent">
+                                <i class="fas fa-home"></i>
+                                Rent Amount (Rs.)
+                            </label>
+                            <input type="number" id="rent" min="0" step="0.01" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="wifi">
+                                <i class="fas fa-wifi"></i>
+                                WiFi Bill (Rs.)
+                            </label>
+                            <input type="number" id="wifi" min="0" step="0.01" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="electricity">
+                                <i class="fas fa-bolt"></i>
+                                Electricity Units (@ Rs. 12/unit)
+                            </label>
+                            <input type="number" id="electricity" min="0" step="0.1" required placeholder="Enter units consumed">
+                            <div class="electricity-calculation">
+                                <small class="text-muted">
+                                    <i class="fas fa-calculator"></i>
+                                    Total: Rs. <span id="electricity-total">0</span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>
+                            <i class="fas fa-check"></i>
+                            Payment Status
+                        </h3>
+                        <div class="payment-status">
+                            <div class="status-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="rent-paid">
+                                    <span class="checkmark"></span>
+                                    <i class="fas fa-home"></i>
+                                    Rent Paid
+                                </label>
+                            </div>
+                            <div class="status-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="wifi-paid">
+                                    <span class="checkmark"></span>
+                                    <i class="fas fa-wifi"></i>
+                                    WiFi Paid
+                                </label>
+                            </div>
+                            <div class="status-item">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="electricity-paid">
+                                    <span class="checkmark"></span>
+                                    <i class="fas fa-bolt"></i>
+                                    Electricity Paid
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>
+                            <i class="fas fa-sticky-note"></i>
+                            Notes (Optional)
+                        </h3>
+                        <div class="form-group">
+                            <textarea id="notes" placeholder="Add any additional notes..." rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="auto-fill-btn" class="btn btn-secondary">
+                            <i class="fas fa-magic"></i>
+                            Auto-fill Previous Month
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Save Entry
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- History Page -->
+        <section id="history" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-history"></i>
+                        Payment History
+                    </h2>
+                    <p class="subtitle">View and manage all your records</p>
+                </div>
+
+                <div class="history-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-history" placeholder="Search by month, year, or notes...">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">
+                            <i class="fas fa-list"></i>
+                            All
+                        </button>
+                        <button class="filter-btn" data-filter="paid">
+                            <i class="fas fa-check"></i>
+                            Paid
+                        </button>
+                        <button class="filter-btn" data-filter="unpaid">
+                            <i class="fas fa-times"></i>
+                            Unpaid
+                        </button>
+                    </div>
+                </div>
+
+                <div id="history-list" class="history-list">
+                    <!-- History entries will be populated here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Page -->
+        <section id="settings" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h2>
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </h2>
+                    <p class="subtitle">Manage your app preferences</p>
+                </div>
+
+                <div class="settings-sections">
+                    <div class="settings-section">
+                        <h3>
+                            <i class="fas fa-bolt"></i>
+                            Electricity Rate
+                        </h3>
+                        <div class="form-group">
+                            <label for="electricity-rate">
+                                <i class="fas fa-money-bill"></i>
+                                Rate per Unit (Rs.)
+                            </label>
+                            <input type="number" id="electricity-rate" value="12" min="1" step="0.01">
+                            <small class="text-muted">Current rate: Rs. 12 per unit</small>
+                        </div>
+                        <button class="btn btn-secondary" onclick="app.updateElectricityRate()">
+                            <i class="fas fa-save"></i>
+                            Update Rate
+                        </button>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>
+                            <i class="fas fa-database"></i>
+                            Data Management
+                        </h3>
+                        <div class="settings-actions">
+                            <button class="btn btn-secondary" onclick="app.exportData()">
+                                <i class="fas fa-download"></i>
+                                Export All Data
+                            </button>
+                            <button class="btn btn-secondary" onclick="app.importData()">
+                                <i class="fas fa-upload"></i>
+                                Import Data
+                            </button>
+                            <button class="btn btn-danger" onclick="app.clearAllData()">
+                                <i class="fas fa-trash"></i>
+                                Clear All Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>
+                            <i class="fas fa-bell"></i>
+                            Reminders
+                        </h3>
+                        <div class="setting-item">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="monthly-reminder">
+                                <span class="checkmark"></span>
+                                <div class="setting-info">
+                                    <strong>Monthly Bill Reminder</strong>
+                                    <p>Get notified at the beginning of each month</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>
+                            <i class="fas fa-info-circle"></i>
+                            About
+                        </h3>
+                        <div class="about-info">
+                            <p><strong>Rental Management App</strong></p>
+                            <p>Version 1.0.0</p>
+                            <p>A simple, offline app to track your monthly rent, WiFi, and electricity bills using the Bikram Sambat calendar.</p>
+                            <p><strong>Features:</strong></p>
+                            <ul>
+                                <li>Fully offline functionality</li>
+                                <li>Bikram Sambat date support</li>
+                                <li>Color-coded payment status</li>
+                                <li>Auto-fill previous month data</li>
+                                <li>Export/Import capabilities</li>
+                                <li>Mobile-friendly design</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-edit"></i>
+                    Edit Entry
+                </h3>
+                <button class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-form">
+                    <!-- Edit form will be populated dynamically -->
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-trash"></i>
+                    Confirm Delete
+                </h3>
+                <button class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this entry? This action cannot be undone.</p>
+                <div class="modal-actions">
+                    <button id="confirm-delete" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                        Delete
+                    </button>
+                    <button id="cancel-delete" class="btn btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-upload"></i>
+                    Import Data
+                </h3>
+                <button class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Select a JSON file to import your rental data:</p>
+                <input type="file" id="import-file" accept=".json" class="file-input">
+                <div class="modal-actions">
+                    <button id="confirm-import" class="btn btn-primary">
+                        <i class="fas fa-upload"></i>
+                        Import
+                    </button>
+                    <button id="cancel-import" class="btn btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- File input for import (hidden) -->
+    <input type="file" id="hidden-file-input" accept=".json" style="display: none;">
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bikram-sambat-js@1.0.0/dist/index.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
