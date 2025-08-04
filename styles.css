@@ -249,7 +249,7 @@ body {
     border-radius: 12px;
     margin-bottom: 2rem;
     text-align: center;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .month-display {
@@ -1358,4 +1358,432 @@ body {
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
+}
+
+/* Tenant Management Styles */
+.tenant-overview {
+    margin-bottom: 2rem;
+}
+
+.overview-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.overview-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.overview-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.overview-content h3 {
+    margin: 0 0 0.5rem 0;
+    color: #4a5568;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.overview-content p {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.tenant-actions {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.tenants-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.tenant-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tenant-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.tenant-card.active {
+    border-color: #48bb78;
+}
+
+.tenant-card.inactive {
+    border-color: #cbd5e0;
+    opacity: 0.7;
+}
+
+.tenant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.tenant-info h3 {
+    margin: 0 0 0.5rem 0;
+    color: #2d3748;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.tenant-room {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+.tenant-status .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-badge.active {
+    background: #c6f6d5;
+    color: #22543d;
+}
+
+.status-badge.inactive {
+    background: #e2e8f0;
+    color: #4a5568;
+}
+
+.tenant-details {
+    margin-bottom: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+
+.detail-item i {
+    width: 16px;
+    text-align: center;
+    color: #718096;
+}
+
+.tenant-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.tenant-actions .action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.tenant-actions .action-btn.edit {
+    background: #bee3f8;
+    color: #2b6cb0;
+}
+
+.tenant-actions .action-btn.edit:hover {
+    background: #90cdf4;
+}
+
+.tenant-actions .action-btn.delete {
+    background: #fed7d7;
+    color: #c53030;
+}
+
+.tenant-actions .action-btn.delete:hover {
+    background: #feb2b2;
+}
+
+/* Tenant Separation Styles */
+.tenant-separation {
+    display: grid;
+    gap: 2rem;
+}
+
+.paid-tenants-section,
+.unpaid-tenants-section {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 1.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid;
+}
+
+.section-title.paid {
+    color: #22543d;
+    border-color: #48bb78;
+}
+
+.section-title.unpaid {
+    color: #c53030;
+    border-color: #f56565;
+}
+
+.tenant-bills-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.tenant-bill-card {
+    background: #f7fafc;
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 4px solid;
+}
+
+.tenant-bill-card.fully-paid {
+    border-color: #48bb78;
+    background: #f0fff4;
+}
+
+.tenant-bill-card.unpaid {
+    border-color: #f56565;
+    background: #fffafa;
+}
+
+.tenant-bill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.tenant-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tenant-name strong {
+    font-size: 1.1rem;
+    color: #2d3748;
+}
+
+.room-number {
+    background: #e2e8f0;
+    color: #4a5568;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.payment-progress {
+    text-align: right;
+}
+
+.progress-text {
+    font-size: 0.8rem;
+    color: #718096;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.progress-bar {
+    width: 80px;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+    transition: width 0.3s ease;
+}
+
+.bill-details {
+    margin-bottom: 1rem;
+}
+
+.bill-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.bill-row:last-child {
+    border-bottom: none;
+}
+
+.bill-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4a5568;
+}
+
+.bill-amount {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.bill-status-indicator {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.bill-status-indicator.paid {
+    background: #c6f6d5;
+    color: #22543d;
+}
+
+.bill-status-indicator.unpaid {
+    background: #fed7d7;
+    color: #c53030;
+}
+
+.bill-total {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 0 0.5rem 0;
+    margin-top: 0.5rem;
+    border-top: 2px solid #e2e8f0;
+}
+
+.tenant-bill-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.no-tenants-message {
+    text-align: center;
+    color: #718096;
+    font-style: italic;
+    padding: 2rem;
+    margin: 0;
+}
+
+/* Modal Enhancements */
+.modal-content {
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Form Enhancements */
+.form-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    color: #4a5568;
+    font-size: 1.1rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tenants-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .overview-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .tenant-bill-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .payment-progress {
+        text-align: left;
+        width: 100%;
+    }
+    
+    .progress-bar {
+        width: 100%;
+    }
 }
