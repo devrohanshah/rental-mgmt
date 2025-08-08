@@ -203,4 +203,5 @@ For questions or support:
 
 **Made with ❤️ for organized rental management**
 
+
 *Keep track of your bills, stay organized, and never miss a payment!*
